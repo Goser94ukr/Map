@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    #tooltip {
+      font-family: 'Poppins';
+      font-weight: 400;
+      font-size: 14px;
+      height: auto;
+      width: 350px;
+      background: #FFFFFF;
+      border: 1px solid #DAE8F5;
+      box-shadow: 0px 4px 12px rgba(109, 109, 109, 0.15);
+      border-radius: 16px;
+      padding-left: 30px;
+      padding-right: 30px;
+      text-align: start;
+      z-index: 1005;
+    }
+
+    foreignObject {
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #resetMap {
+      float: right;
+      border: 0px;
+      background: inherit;
+    }
+
+    .state {
+      fill: #D0D0D0
+    }
+
+    /* default color for all states not specified below */
+
+    path {
+      stroke: #FFFFFF;
+      stroke-width: 1px;
+      stroke-linejoin: round;
+    }
+
+    .text-decoration {
+      text-align: start
+    }
+
+    svg {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      /*overflow-wrap: break-word;*/
+    }
+
+    svg .state {
+      text-align: center;
+    }
+
+    .stateHover:hover {
+      fill: #7BD7D6 !important;
+      color: #FFFFFF;
+    }
+
+    .stateHover:hover .text-decoration {
+      color: black;
+    }
+
+    #legend span {
+      float: left;
+      white-space: nowrap;
+      color: #54585C;
+      font-weight: 400;
+      font-size: 14px;
+      margin-right: 15px;
+      margin-bottom: 15px;
+      margin-left: 0px;
+    }
+
+    .box {
+      vertical-align: middle;
+      background: #111111;
+      float: left;
+      height: 12px;
+      width: 12px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+  </style>
+  <script>
+    const data = [
+      {
+        "state": "Alabama",
+        "industry": "Law Enforcement/Security",
+        "position": "Counselor",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Counselor</h3>\n<i>Alabama</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,560 - $80,150</strong></p>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Law Enforcement/Security has a slight gap over all others.</p>\n<p>The position of Counselor corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Alaska",
+        "industry": "Science & Research",
+        "position": "Geologist",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Geologist</h3>\n<i>Alaska</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$81,240-$124,380</strong></p>\n\n<p>64% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Science & Research.</p>\n<p>The position of Geologist corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Arizona",
+        "industry": "IT",
+        "position": "Superintendent",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>Arizona</i>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Superintendent doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Arkansas",
+        "industry": "Building & Construction",
+        "position": "Architect",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Architect</h3>\n<i>Arkansas</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$53,260 - $128,960</strong></p>\n\n<p>17% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Building & Construction has a slight gap over all others.</p>\n<p>The position of Architect corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "California",
+        "industry": "IT",
+        "position": "Software Engineer",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Software Engineer</h3>\n<i>California</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$146,770</strong></p>\n\n<p>14% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Software Engineer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Colorado",
+        "industry": "IT",
+        "position": "Software Developer",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Software Developer</h3>\n<i>Colorado</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$120,140</strong></p>\n\n<p>21% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Software Developer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Connecticut",
+        "industry": "Accounting & Finance",
+        "position": "CRNA",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">CRNA</h3>\n<i>Connecticut</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$276,540</strong></p>\n\n<p>18% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Accounting & Finance has a slight gap over all others.</p>\n<p>The position of CRNA doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Delaware",
+        "industry": "IT",
+        "position": "Trader",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Trader</h3>\n<i>Delaware</i>\n\n<p>32% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Trader doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Florida",
+        "industry": "IT",
+        "position": "Project Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Florida</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$91,540</strong></p>\n\n<p>21% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Project Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Georgia",
+        "industry": "Manufacturing. Warehouse & Production",
+        "position": "Manufacturing Engineer",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Manufacturing Engineer</h3>\n<i>Georgia</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$63,540-$88,390</strong></p>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Manufacturing, Warehouse & Production industry is significantly greater over all others.</p>\n<p>The position of Manufacturing Engineer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Hawaii",
+        "industry": "Sales",
+        "position": "Territory Sales Executive",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Territory Sales Executive</h3>\n<i>Hawaii</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$103,030</strong></p>\n\n<p>41% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Territory Sales Executive corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Idaho",
+        "industry": "Management level",
+        "position": "Superintendent",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>Idaho</i>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Management level industry is significantly greater over all others.</p>\n<p>The position of Superintendent corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Illinois",
+        "industry": "Sales",
+        "position": "Electrical Engineer",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Electrical Engineer</h3>\n<i>Illinois</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$100,190</strong></p>\n\n<p>12% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Sales has a slight gap over all others.</p>\n<p>The position of Electrical Engineer doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Indiana",
+        "industry": "Healthcare & Therapy",
+        "position": "Mechanical Engineer",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Mechanical Engineer</h3>\n<i>Indiana</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$87,930</strong></p>\n\n<p>24% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Healthcare & Therapy industry is significantly greater over all others.</p>\n<p>The position of Mechanical Engineer doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Iowa",
+        "industry": "Healthcare & Therapy",
+        "position": "Administrator",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Administrator</h3>\n<i>Iowa</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$45,620-$105,850</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Healthcare & Therapy has a slight gap over all others.</p>\n<p>The position of Administrator doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Kansas",
+        "industry": "Engineering",
+        "position": "Plant Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Plant Manager</h3>\n<i>Kansas</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$113,480</strong></p>\n\n<p>68% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Engineering.</p>\n<p>The position of Plant Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Kentucky",
+        "industry": "Engineering",
+        "position": "Building Engineer",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Building Engineer</h3>\n<i>Kentucky</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$87,220</strong></p>\n\n<p>23% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Engineering industry is significantly greater over all others.</p>\n<p>The position of Building Engineer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Louisiana",
+        "industry": "Sales",
+        "position": "Sales Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Sales Manager</h3>\n<i>Louisiana</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$113,770</strong></p>\n\n<p>20% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Sales has a slight gap over all others.</p>\n<p>The position of Sales Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Maine",
+        "industry": "Healthcare & Therapy",
+        "position": "Nurse Practitioner",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Nurse Practitioner</h3>\n<i>Maine</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$116,370</strong></p>\n\n<p>68% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Healthcare & Therapy.</p>\n<p>The position of Nurse Practitioner corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Maryland",
+        "industry": "Healthcare & Therapy",
+        "position": "Estimator",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Estimator</h3>\n<i>Maryland</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$76,010</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Healthcare & Therapy has a slight gap over all others.</p>\n<p>The position of Estimator doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Massachusetts",
+        "industry": "Healthcare & Therapy",
+        "position": "CNA",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">CNA</h3>\n<i>Massachusetts</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$37,680</strong></p>\n\n<p>52% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of CNA corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Michigan",
+        "industry": "Human Resources",
+        "position": "HR Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">HR Manager</h3>\n<i>Michigan</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$120,150</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Human Resources has a slight gap over all others.</p>\n<p>The position of HR Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Minnesota",
+        "industry": "Accounting & Finance",
+        "position": "Maintenance Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Maintenance Manager</h3>\n<i>Minnesota</i>\n\n<p>20% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Accounting & Finance has a slight gap over all others.</p>\n<p>The position of Maintenance Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Mississippi",
+        "industry": "Law Enforcement/Security",
+        "position": "Safety Officer",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Safety Officer</h3>\n<i>Mississippi</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,940</strong></p>\n\n<p>24% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Law Enforcement/Security industry is significantly greater over all others.</p>\n<p>The position of Safety Officer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Missouri",
+        "industry": "Management level",
+        "position": "Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Manager</h3>\n<i>Missouri</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$41,480-$145,860</strong></p>\n\n<p>26% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Management level industry is significantly greater over all others.</p>\n<p>The position of Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Montana",
+        "industry": "Engineering",
+        "position": "Transmission Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Transmission Manager</h3>\n<i>Montana</i>\n\n<p>36% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Engineering industry is significantly greater over all others.</p>\n<p>The position of Transmission Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Nebraska",
+        "industry": "Office & Administrative",
+        "position": "Office Manager And Executive Assistant",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Office Manager And Executive Assistant</h3>\n<i>Nebraska</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$37,800-$102,630</strong></p>\n\n<p>52% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The positions of Office Manager And Executive Assistant correspond to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Nevada",
+        "industry": "Accounting & Finance",
+        "position": "Accountant",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Accountant</h3>\n<i>Nevada</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$68,360</strong></p>\n\n<p>15% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Accounting & Finance has a slight gap over all others.</p>\n<p>The position of Accountant corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "New Hampshire",
+        "industry": "Healthcare & Therapy",
+        "position": "Director Of Nursing",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Director Of Nursing</h3>\n<i>New Hampshire</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$72,210-$120,730</strong></p>\n\n<p>71% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Healthcare & Therapy.</p>\n<p>The position of Director Of Nursing corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "New Jersey",
+        "industry": "C-Level & TOP management",
+        "position": "Social Media Director",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Social Media Director</h3>\n<i>New Jersey</i>\n\n<p>23% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the C-Level & TOP management industry is significantly greater over all others.</p>\n<p>The position of Social Media Director corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "New Mexico",
+        "industry": "Office & Administrative",
+        "position": "Executive Assistant",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Executive Assistant</h3>\n<i>New Mexico</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,520-$64,420</strong></p>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Office & Administrative industry is significantly greater over all others.</p>\n<p>The position of Executive Assistant corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "New York",
+        "industry": "IT",
+        "position": "Estimator",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Estimator</h3>\n<i>New York</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$83,550</strong></p>\n\n<p>14% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Estimator doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "North Carolina",
+        "industry": "IT",
+        "position": "Customer Service Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Customer Service Manager</h3>\n<i>North Carolina</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$36,850</strong></p>\n\n<p>25% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Customer Service Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "North Dakota",
+        "industry": "Healthcare & Therapy",
+        "position": "Business Account Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Business Account Manager</h3>\n<i>North Dakota</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$71,036-$118,560</strong></p>\n\n<p>42% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Business Account Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Ohio",
+        "industry": "Engineering",
+        "position": "Sales Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Sales Manager</h3>\n<i>Ohio</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$143,090</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Engineering has a slight gap over all others.</p>\n<p>The position of Sales Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Oklahoma",
+        "industry": "Healthcare & Therapy",
+        "position": "Marketing Director",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Marketing Director</h3>\n<i>Oklahoma</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$60,330-$127,440</strong></p>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Healthcare & Therapy has a slight gap over all others.</p>\n<p>The position of Marketing Director doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Oregon",
+        "industry": "Customer Service",
+        "position": "Technician",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Technician</h3>\n<i>Oregon</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,120-$82,040</strong></p>\n\n<p>18% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Customer Service has a slight gap over all others.</p>\n<p>The position of Technician doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Pennsylvania",
+        "industry": "IT",
+        "position": "Project Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Pennsylvania</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$90,340</strong></p>\n\n<p>12% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Project Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Rhode Island",
+        "industry": "Marketing & Advertising",
+        "position": "Marketing Director",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Marketing Director</h3>\n<i>Rhode Island</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$165,870</strong></p>\n\n<p>27% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Marketing & Advertising industry is significantly greater over all others.</p>\n<p>The position of Marketing Director corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "South Carolina",
+        "industry": "Accounting & Finance",
+        "position": "Accountant",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Accountant</h3>\n<i>South Carolina</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$71,400</strong></p>\n\n<p>29% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Accounting & Finance industry is significantly greater over all others.</p>\n<p>The position of Accountant corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "South Dakota",
+        "industry": "Office & Administrative",
+        "position": "Superintendent",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>South Dakota</i>\n\n<p>57% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Superintendent doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Tennessee",
+        "industry": "C-Level & TOP management",
+        "position": "Project Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Tennessee</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$80,430</strong></p>\n\n<p>15% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but C-Level & TOP management has a slight gap over all others.</p>\n<p>The position of Project Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Texas",
+        "industry": "IT",
+        "position": "Assistant Superintendent",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Assistant Superintendent</h3>\n<i>Texas</i>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Assistant Superintendent doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Utah",
+        "industry": "Accounting & Finance",
+        "position": "Banker",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Banker</h3>\n<i>Utah</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$75,040-$85,870</strong></p>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Accounting & Finance industry is significantly greater over all others.</p>\n<p>The position of Banker corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Vermont",
+        "industry": "Healthcare & Therapy",
+        "position": "Hospitalist Physician",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Hospitalist Physician</h3>\n<i>Vermont</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$204,400-$280,490</strong></p>\n\n<p>75% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Healthcare & Therapy.</p>\n<p>The position of Hospitalist Physician corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Virginia",
+        "industry": "IT",
+        "position": "Counsel",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Counsel</h3>\n<i>Virginia</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$43,320-$108,910</strong></p>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Counsel doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+      },
+      {
+        "state": "Washington",
+        "industry": "IT",
+        "position": "Project Manager",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Washington</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$120,800</strong></p>\n\n<p>29% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Project Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "West Virginia",
+        "industry": "IT",
+        "position": "Analyst",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Analyst</h3>\n<i>West Virginia</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$33,840-$91,160</strong></p>\n\n<p>27% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Analyst corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Wisconsin",
+        "industry": "Management level",
+        "position": "Superintendent",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>Wisconsin</i>\n\n<p>24% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Management level industry is significantly greater over all others.</p>\n<p>The position of Superintendent corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      },
+      {
+        "state": "Wyoming",
+        "industry": "Accounting & Finance",
+        "position": "Banker",
+        "tooltip": "<h3 style=\"margin-bottom: 0px\">Banker</h3>\n<i>Wyoming</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$57,780-$71,920</strong></p>\n\n<p>41% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Banker corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+      }
+    ]
+
+    const colors = {
+      "IT": "#F9693B",
+      "Healthcare & Therapy": "#01ADAB",
+      "Engineering": "#ABCB4E",
+      "Accounting & Finance": "#A935D2",
+      "Sales": "#6CA1D6",
+      "Marketing & Advertising": "#D23E4E",
+      "Law Enforcement/Security": "#F9DA3B",
+      "C-Level & TOP management": "#7064BB",
+      "Management level": "#47A338",
+      "Science & Research": "#D8BD36",
+      "Customer Service": "#1FF4E7",
+      "Manufacturing. Warehouse & Production": "#5AD92E",
+      "Human Resources": "#EA89C3",
+      "Office & Administrative": "#CCE823",
+      "Building & Construction": "#24FF00",
+    };
+
+    let timerId;
+
+    let mapChart;
+
+    let mouseStartPosition = {x: 0, y: 0};
+    let mousePosition = {x: 0, y: 0};
+    let viewboxStartPosition = {x: 0, y: 0};
+    let viewboxPosition = {x: 0, y: 0};
+    let viewboxSize = {x: 1100, y: 930};
+    let viewboxScale = 1.0;
+
+    let mouseDown = false;
+
+    // function showTooltip(evt) {
+    //   if (timerId) {
+    //     clearTimeout(timerId);
+    //   }
+    //   timerId = setTimeout(() => {
+    //     const mapChart = document.getElementById('mapChart');
+    //     let tooltip = mapChart.getElementById("tooltip");
+    //     const parent = evt.target.closest("g");
+    //     const tooltipText = parent.querySelector(".tooltip");
+    //     tooltip.innerHTML = tooltipText.innerHTML;
+    //     tooltip.style.display = "block";
+    //     let tooltipWindow = mapChart.getElementById("tooltipWindow")
+    //     evt.pageX > 674 ? tooltipWindow.setAttribute("x", evt.pageX - 400) : tooltipWindow.setAttribute("x", evt.pageX + 10)
+    //     tooltipWindow.setAttribute("y", evt.pageY + 10)
+    //     tooltipWindow.setAttribute("width", 420)
+    //     tooltipWindow.setAttribute("height", 350)
+    //   }, 200);
+    // }
+
+    function showTooltip(evt) {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      timerId = setTimeout(() => {
+        let tooltip = document.getElementById("tooltip");
+        const parent = evt.target.closest("g");
+        const tooltipText = parent.querySelector(".tooltip");
+        tooltip.innerHTML = tooltipText.innerHTML;
+        tooltip.style.display = "block";
+        let x = evt.offsetX;
+        let y = evt.offsetY;
+        tooltip.style.left = (x + 20) + 'px';
+        tooltip.style.top = (y + 20) + 'px';
+      }, 200);
+    }
+
+    function hideTooltip() {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      let tooltip = document.getElementById("tooltip");
+
+      tooltip.style.display = "none";
+    }
+
+    function resetChart () {
+      mapChart.setAttribute("viewBox", 0 + " " + 0 + " " + 1100 + " " + 930);
+      mouseStartPosition = {x: 0, y: 0};
+      mousePosition = {x: 0, y: 0};
+      viewboxStartPosition = {x: 0, y: 0};
+      viewboxPosition = {x: 0, y: 0};
+      viewboxSize = {x: 1100, y: 930};
+      viewboxScale = 1.0;
+    }
+
+    const init = (mapChart) => {
+      mapChart.addEventListener("mousemove", mousemove);
+      mapChart.addEventListener("mousedown", mousedown);
+      mapChart.addEventListener("wheel", wheel);
+    }
+
+    function mousedown(e) {
+      mouseStartPosition.x = e.pageX;
+      mouseStartPosition.y = e.pageY;
+
+      viewboxStartPosition.x = viewboxPosition.x;
+      viewboxStartPosition.y = viewboxPosition.y;
+
+      window.addEventListener("mouseup", mouseup);
+
+      mouseDown = true;
+    }
+
+    function setviewbox() {
+      let vp = {x: 0, y: 0};
+      let vs = {x: 0, y: 0};
+
+      vp.x = viewboxPosition.x;
+      vp.y = viewboxPosition.y;
+
+      vs.x = viewboxSize.x * viewboxScale;
+      vs.y = viewboxSize.y * viewboxScale;
+
+      mapChart.setAttribute("viewBox", vp.x + " " + vp.y + " " + vs.x + " " + vs.y);
+    }
+
+    function mousemove(e) {
+      mousePosition.x = e.offsetX;
+      mousePosition.y = e.offsetY;
+
+      if (mouseDown)
+      {
+        viewboxPosition.x = viewboxStartPosition.x + (mouseStartPosition.x - e.pageX) * viewboxScale;
+        viewboxPosition.y = viewboxStartPosition.y + (mouseStartPosition.y - e.pageY) * viewboxScale;
+
+        setviewbox();
+      }
+
+      let mpos = {x: mousePosition.x * viewboxScale, y: mousePosition.y * viewboxScale};
+      let vpos = {x: viewboxPosition.x, y: viewboxPosition.y};
+      let cpos = {x: mpos.x + vpos.x, y: mpos.y + vpos.y}
+    }
+
+    function mouseup(e) {
+      window.removeEventListener("mouseup", mouseup);
+
+      mouseDown = false;
+    }
+
+    function wheel(e) {
+      e.preventDefault();
+      let scale = (e.deltaY < 0) ? 0.8 : 1.2;
+
+      if ((viewboxScale * scale < 8.) && (viewboxScale * scale > 1./256.))
+      {
+        let mpos = {x: mousePosition.x * viewboxScale, y: mousePosition.y * viewboxScale};
+        let vpos = {x: viewboxPosition.x, y: viewboxPosition.y};
+        let cpos = {x: mpos.x + vpos.x, y: mpos.y + vpos.y}
+
+        viewboxPosition.x = (viewboxPosition.x - cpos.x) * scale + cpos.x;
+        viewboxPosition.y = (viewboxPosition.y - cpos.y) * scale + cpos.y;
+        viewboxScale *= scale;
+
+        setviewbox();
+      }
+    }
+
+
+    // function hideTooltip() {
+    //   if (timerId) {
+    //     clearTimeout(timerId);
+    //   }
+    //   let tooltip = document.getElementById("tooltip");
+    //   let tooltipWindow = mapChart.getElementById("tooltipWindow")
+    //   tooltipWindow.setAttribute("x", 0)
+    //   tooltipWindow.setAttribute("y", 0)
+    //   tooltipWindow.setAttribute("width", 0)
+    //   tooltipWindow.setAttribute("height", 0)
+    //
+    //   tooltip.style.display = "none";
+    // }
+
+    window.addEventListener("load", function() {
+      mapChart = document.getElementById('mapChart');
+      function printMousePos(event) {
+        const xy =
+          "offsetX: " + event.offsetX +
+          " - offsetY: " + event.offsetY;
+        console.log(xy);
+      }
+      Object.entries(colors).forEach(entry => {
+        const [key, value] = entry;
+        document.getElementById(key).style.background = value
+      });
+      if (mapChart) {
+        mapChart.addEventListener("click", printMousePos)
+        // fetch('./data.json')
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        //     data.forEach(element => {
+        //       let text = mapChart.getElementById(element.state + "Text");
+        //       text.innerHTML = element.position;
+        //       let tooltip = mapChart.getElementById(element.state + "Tooltip");
+        //       tooltip.innerHTML = element.tooltip;
+        //       mapChart.getElementById(element.state).setAttribute('fill', colors[element.industry]);
+        //     })
+        //   });
+        data.forEach(element => {
+          let text = mapChart.getElementById(element.state + "Text");
+          text.innerHTML = element.position;
+          let tooltip = mapChart.getElementById(element.state + "Tooltip");
+          tooltip.innerHTML = element.tooltip;
+          // mapChart.getElementById("Alaska").setAttribute("data-bs-title", `Hello`);
+          // console.log(mapChart.getElementById("Alaska"))
+          mapChart.getElementById(element.state).setAttribute('fill', colors[element.industry]);
+        })
+      }
+      // const svgImage = document.getElementById("mapChart");
+      // const svgContainer = document.getElementById("map");
+      //
+      // let viewBox = {x:0,y:0,w:svgImage.clientWidth,h:svgImage.clientHeight};
+      //
+      // svgImage.onmousewheel = function(e) {
+      //   e.preventDefault();
+      //   let w = viewBox.w;
+      //   let h = viewBox.h;
+      //   let dw = w*Math.sign(e.deltaY)*0.05;
+      //   let dh = h*Math.sign(e.deltaY)*0.05;
+      //   viewBox = {x:0,y:0,w:viewBox.w-dw,h:viewBox.h-dh};
+      //   svgImage.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+      // }
+
+      init(mapChart)
+    })
+  </script>
+</head>
+<body>
+
+<div>
+  <div id="container" style="position: relative">
+    <div id="map" style="width: 100%; height: 100%">
+      <button id="resetMap" onClick="resetChart()" style="float: right;"><svg width="30" height="30" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.5" y="0.5" width="25" height="25" rx="5.5" fill="#F6F6F6"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.14979 8.20698C8.88944 7.94663 8.46733 7.94663 8.20698 8.20698C7.94663 8.46733 7.94663 8.88944 8.20698 9.14979L12.0568 12.9996L8.20702 16.8494C7.94667 17.1097 7.94667 17.5319 8.20702 17.7922C8.46737 18.0525 8.88948 18.0525 9.14983 17.7922L12.9996 13.9424L16.8494 17.7922C17.1097 18.0525 17.5319 18.0525 17.7922 17.7922C18.0525 17.5319 18.0525 17.1097 17.7922 16.8494L13.9424 12.9996L17.7922 9.14979C18.0526 8.88944 18.0526 8.46733 17.7922 8.20698C17.5319 7.94663 17.1098 7.94663 16.8494 8.20698L12.9996 12.0568L9.14979 8.20698Z" fill="#696D70" stroke="#696D70" stroke-width="0.3"/>
+        <rect x="0.5" y="0.5" width="25" height="25" rx="5.5" stroke="#EAEAEB"/>
+      </svg></button>
+      <div id="tooltip" display="block" style="position: absolute; display: none;"></div>
+
+      <svg id="mapChart" viewbox="0 0 1100 930">
+
+        <g class="state">
+
+          <g id="Alabama" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="AlabamaPath" fill="" class="al"
+                  d="m 643,467.4 .4,-7.3 -.9,-1.2 -1.7,-.7 -2.5,-2.8 .5,-2.9 48.8,-5.1 -.7,-2.2 -1.5,-1.5 -.5,-1.4 .6,-6.3 -2.4,-5.7 .5,-2.6 .3,-3.7 2.2,-3.8 -.2,-1.1 -1.7,-1 v -3.2 l -1.8,-1.9 -2.9,-6.1 -12.9,-45.8 -45.7,4 1.3,2 -1.3,67 4.4,33.2 .9,-.5 1.3,.1 .6,.4 .8,-.1 2,-3.8 v -2.3 l 1.1,-1.1 1.4,.5 3.4,6.4 v .9 l -3.3,2.2 3.5,-.4 4.9,-1.6 z"></path>
+            <!--      <circle id="AlabamaDot" cx="645" cy="380" r="2" fill="black"/>-->
+            <line x1="645" y1="400" x2="614" y2="546" stroke="black"/>
+            <line x1="614" y1="546" x2="685" y2="546" stroke="black"/>
+            <foreignObject x="620" y="529" width="80" height="40">
+              <div id="AlabamaText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="AlabamaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Alaska" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="AlaskaPath" class="ak"
+                  d="m 15.8,572 h 2.4 l .7,.7 -1,1.2 -1.9,.2 -2.5,1.3 -3.7,-.1 2.2,-.9 .3,-1.1 2.5,-.3 z m 8.3,-1.7 1.3,.5 h .9 l .5,1.2 .3,-.6 .9,.2 1.1,1.5 0,.5 -4.2,1.9 -2.4,-.1 -1,-.5 -1.1,.7 -2,0 -1.1,-1.4 4.7,-.5 z m 5.4,-.1 1,.1 .7,.7 v 1 l -1.3,.1 -.9,-1.1 z m 2.5,.3 1.3,-.1 -.1,1 -1.1,.6 z m .3,2.2 3.4,-.1 .2,1.1 -1.3,.1 -.3,-.5 -.8,.6 -.4,-.6 -.9,-.2 z m 166.3,7.6 2.1,.1 -1,1.9 -1.1,-.1 -.4,-.8 .5,-1.3 m -1.1,-2.9 .6,-1.3 -.2,-2.3 2.4,-.5 4.5,4.4 1.3,3.4 1.9,1.6 .3,5.1 -1.4,0 -1.3,-2.3 -3.1,-2.4 h -.6 l 1.1,2.8 1.7,.2 .2,2.1 -.9,.1 -4.1,-4.4 -.1,-.9 1.9,-1 0,-1 -.5,-.8 -1.6,-.6 -1.7,-1.3 1.4,.1 .5,-.4 -.6,-.9 -.6,.5 z m -3.6,-9.1 1.3,.1 2.4,2.5 -.2,.8 -.8,-.1 -.1,1.8 .5,.5 0,1.5 -.8,.3 -.4,1.2 -.8,-.4 -.4,-2.2 1.1,-1.4 -2.1,-2.2 .1,-1.2 z m 1.5,-1.5 1.9,.2 2.5,.1 3.4,3.2 -.2,.5 -1.1,.6 -1.1,-.2 -.1,-.7 -1.2,-1.6 -.3,.7 1,1.3 -.2,1.2 -.8,-.1 -1.3,.2 -.1,-1.7 -2.6,-2.8 z m -12.7,-8.9 .9,-.4 h 1.6 l .7,-.5 4.1,2.2 .1,1.5 -.5,.5 h -.8 l -1.4,-.7 1.1,1.3 1.8,0 .5,2 -.9,0 -2.2,-1.5 -1.1,-.2 .6,1.3 .1,.9 .8,-.6 1.7,1.2 1.3,-.1 -.2,.8 1.9,4.3 0,3.4 .4,2.1 -.8,.3 -1.2,-2 -.5,-1.5 -1.6,-1.6 -.2,-2.7 -.6,-1.7 h -.7 l .3,1.1 0,.5 -1.4,1 .1,-3.3 -1.6,-1.6 -1.3,-2.3 -1.2,-1.2 z m 7.2,-2.3 1.1,1.8 2.4,-.1 1,2.1 -.6,.6 2,3.2 v 1.3 l -1.2,.8 v .7 l -2,1.9 -.5,-1.4 -.1,-1.3 .6,-.7 v -1.1 l -1.5,-1.9 -.5,-3.7 -.9,-1.5 z m -56.7,-18.3 -4,4.1 v 1.6 l 2.1,-.8 .8,-1.9 2.2,-2.4 z m -31.6,16.6 0,.6 1.8,1.2 .2,-1.4 .6,.9 3.5,.1 .7,-.6 .2,-1.8 -.5,-.7 -1.4,0 0,-.8 .4,-.6 v -.4 l -1.5,-.3 -3.3,3.6 z m -8.1,6.2 1.5,5.8 h 2.1 l 2.4,-2.5 .3,1.2 6.3,-4 .7,-1 -1,-1.1 v -.7 l .5,-1.3 -.9,-.1 -2,1 0,-1.2 -2.7,-.6 -2.4,.3 -.2,3.4 -.8,-2 -1.5,-.1 -1,.6 z m -2.2,8.2 .1,-.7 2.1,-1.3 .6,.3 1.3,.2 1.3,1.2 -2.2,-.2 -.4,-.6 -1,.6 z m -5.2,3.3 -1.1,.8 1.5,1.4 .8,-.7 -.1,-1.3 z m -6.3,-7.9 1.4,.1 .4,.6 -1.8,.1 z m -13.9,11.9 v .5 l .7,.1 -.1,-.6 z m -.4,-3.2 -1,1 v .5 l .7,1.1 1,-1 -.7,-.1 z m -2,-.8 -.3,1 -1.3,.1 -.4,.2 0,1.3 -.5,.9 .6,0 .7,-.9 .8,-.1 .9,-1 .2,-1.3 z m -4.4,-2 -.2,1.8 1.4,.8 1.2,-.6 0,-1 1.7,-.3 -.1,-.6 -.9,-.2 -.7,.6 -.9,-.5 z m -4.9,-.1 1,.7 -.3,1.2 -1.4,-1.1 z m -4.2,1.3 1.4,.1 -.7,.8 z m -3.5,3 1.8,1.1 -1.7,.1 z m -25.4,-31.2 1.2,.6 -.8,.6 z m -.7,-6.3 .4,1.2 .8,-1.2 z m 24.3,-19.3 1.5,-.1 .9,.4 1.1,-.5 1.3,-.1 1.6,.8 .8,1.9 -.1,.9 -1.2,2 -2.4,-.2 -2.1,-1.8 -1,-.4 -1.1,-2 z m -21.1,-14.4 .1,1.9 2,2 v .5 l -.8,-.2 -1.7,-.8 -.3,-1.1 -.3,-1.6 z m 18.3,-23.3 v 1.2 l 1.9,1.8 h 2.3 l .6,1.1 v 1.6 l 2.1,1.9 1.8,1.2 -.1,.7 -.7,1.1 -1.4,-1.2 -2.1,.1 -.8,-.8 -.9,-2.1 -1.5,-2.2 -2.6,-.1 -1,-.7 1,-2.1 z m 16.8,-4.5 1,0 .1,1.1 h -1 z m 16.2,19.7 .9,.1 0,1.2 -1.7,-.5 z m 127.8,77.7 -1.2,.4 -.1,1.1 h 1.2 z m -157.6,-4.5 -1.3,-.4 -4.1,.6 -2.8,1.4 -.1,1.9 1.9,.7 1.5,-.9 1.7,-.1 4.7,1.4 .1,-1.3 -1.6,-1.1 z m 2.1,2.3 -.4,-1.4 1.2,.2 .1,1.4 1.8,0 .4,-2.5 .3,2.4 2.5,-.1 3.2,-3.3 .8,.1 -.7,1.3 1.4,.9 4.2,-.2 2.6,-1.2 1.4,-.1 .3,1.5 .6,-.5 .4,-1.4 5.9,.2 1.9,-1.6 -1.3,-1.1 .6,-1.2 2.6,.2 -.2,-1.2 2.5,.2 .7,-1.1 1.1,.2 4.6,-1.9 .2,-1.7 5.6,-2.4 2,-1.9 1.2,-.6 1.3,.8 2.3,-.9 1.1,-1.9 .5,-1.3 1.7,-.9 1.5,-.7 .4,-1.4 -1.1,-1.7 -2.2,-.2 -.2,-1.3 .8,-1.6 1.4,-.2 1.3,-1.5 1.9,-.1 3.4,-3.2 .4,-1.4 1.5,-2.3 3.8,-4.1 2.5,-.9 1.9,-.9 2.1,.8 1.4,2.6 -1.5,0 -1.4,-1.5 -3,2 -1.7,.1 -.2,3.1 -3.1,4.9 .6,2 2.3,0 -.6,1 -1.4,.1 -2.4,1.8 0,.9 1.9,1 3.4,-.6 1.4,-1.7 1.4,.1 3,-1.7 .5,-2.3 1.6,-.1 6.3,.8 1,-1.1 1,-4.5 -1.6,1.1 .6,-2.2 -1.6,-1.4 .8,-1.5 .1,1.5 3.4,0 .7,-1 1.6,-.1 -.3,1.7 1.9,.1 -1.9,1.3 4.1,1.1 -3.5,.4 -1.3,1.2 .9,1.4 4.6,-1.7 2.3,1.7 .7,-.9 .6,1.4 4,2.3 h 2.9 l 3.9,-.5 4.3,1.1 2,1.9 4.5,.4 1.8,-1.5 .8,2.4 -1.8,.7 1.2,1.2 7.4,3.8 1.4,2.5 5.4,4.1 3.3,-2 -.6,-2.2 -3.5,-2 3.1,1.2 .5,-.7 .9,1.3 0,2.7 2.1,-.6 2.1,1.8 -2.5,-9.8 1.2,1.3 1.4,6 2.2,2.5 2.4,-.4 1.8,3.5 h .9 l .6,5.6 3.4,.5 1.6,2.2 1.8,1.1 .4,2.8 -1.8,2.6 2.9,1.6 1.2,-2.4 -.2,3.1 -.8,.9 1.4,1.7 .7,-2.4 -.2,-1.2 .8,.2 .6,2.3 -1,1.4 .6,2.6 .5,.4 .3,-1.6 .7,.6 -.3,2 1.2,.2 -.4,.9 1.7,-.1 0,-1 h -1 l .1,-1.7 -.8,-.6 1.7,-.3 .5,-.8 0,-1.6 .5,1.3 -.6,1.8 1.2,3.9 1.8,.1 2.2,-4.2 .1,-1.9 -1.3,-4 -.1,-1.2 .5,-1.2 -.7,-.7 -1.7,.1 -2.5,-2 -1.7,0 -2,-1.4 -1.5,0 -.5,-1.6 -1.4,-.3 -.2,-1.5 -1,-.5 .1,-1.7 -5.1,-7.4 -1.8,-1.5 v -1.2 l -4.3,-3.5 -.7,-1.1 -1.6,-2 -1.9,-.6 0,-2.2 -1.2,-1.3 -1.7,-.7 -2.1,1.3 -1.6,2.1 -.4,2.4 -1.5,.1 -2.5,2.7 -.8,-.3 v -2.5 l -2.4,-2.2 -2.3,-2 -.5,-2 -2.5,-1.3 .2,-2.2 -2.8,-.1 -.7,1.1 -1.2,0 -.7,-.7 -1.2,.8 -1.8,-1.2 0,-85.8 -6.9,-4.1 -1.8,-.5 -2.2,1.1 -2.2,.1 -2.3,-1.6 -4.3,-.6 -5.8,-3.6 -5.7,-.4 -2,.5 -.2,-1.8 -1.8,-.7 1.1,-1 -.2,-.9 -3.2,-1.1 h -2.4 l -.4,.4 -.9,-.6 .1,-2.6 -.8,-.9 -2.5,2.9 -.8,-.1 v -.8 l 1.7,-.8 v -.8 l -1.9,-2.4 -1.1,-.1 -4.5,3.1 h -3.9 l .4,-.9 -1.8,-.1 -5.2,3.4 -1.8,0 -.6,-.8 -2.7,1.5 -3.6,3.7 -2.8,2.7 -1.5,1.2  -2.6,.1 -2.2,-.4 -2.3,-1.3 v 0 l -2.8,3.9 -.1,2.4 2.6,2.4 2.1,4.5 .2,5.3 2.9,2 3.4,.4 .7,.8 -1.5,2.3 .7,2.7 -1.7,-2.6 v -2.4 l -1.5,-.3 .1,1.2 .7,2.1 2.9,3.7 h -1.4 l -2.2,1.1 -6.2,-2.5 -.1,-2 1.4,-1.3 0,-1.4 -2.1,-.5 -2.3,.2 -4.8,.2 1.5,2.3 -1.9,-1.8 -8.4,1.2 -.8,1.5 4.9,4.7 -.8,1.4 -.3,2 -.7,.8 -.1,1.9 4.4,3.6 4.1,.2 4.6,1.9 h 2 l .8,-.6 3.8,.1 .1,-.8 1.2,1.1 .1,2 -2.5,-.1 .1,3.3 .5,3.2 -2.9,2.7 -1.9,-.1 -2,-.8 -1,.1 -3.1,2.1 -1.7,.2 -1.4,-2.8 -3.1,0 -2.2,2 -.5,1.8 -3.3,1.8 -5.3,4.3 -.3,3.1 .7,2.2 1,1.2 1,-.4 .9,1 -.8,.6 -1.5,.9 1.1,1.5 -2.6,1.1 .8,2.2 1.7,2.3 .8,4.1 4,1.5 2.6,-.8 1.7,-1.1 .5,2.1 .3,4.4 -1.9,1.4 0,4.4 -.6,.9 h -1.7 l 1.7,1.2 2.1,-.1 .4,-1 4.6,-.6 2,2.6 1.3,-.7 1.3,5.1 1,.5 1,-.7 .1,-2.4 .9,-1 .7,1.1 .2,1.6 1.6,.4 4.7,-1.2 .2,1.2 -2,1.1 -1.6,1.7 -2.8,7 -4.3,2 -1.4,1.5 -.3,1.4 -1,-.6 -9.3,3.3 -1.8,4.1 -1.3,-.4 .5,-1.1 -1.5,-1.4 -3.5,-.2 -5.3,3.2 -2.2,1.3 -2.3,0 -.5,2.4 z"></path>
+            <!--      <circle id="AlaskaDot" cx="122" cy="460" r="2" fill="black"/>-->
+            <foreignObject x="80" y="471" width="80" height="60">
+              <div id="AlaskaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="AlaskaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Arizona" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="ArizonaPath" class="az"
+                  d="m 139.6,387.6 3,-2.2 .8,-2.4 -1,-1.6 -1.8,-.2 -1.1,-1.6 1.1,-6.9 1.6,-.3 2.4,-3.2 1.6,-7 2.4,-3.6 4.8,-1.7 1.3,-1.3 -.4,-1.9 -2.3,-2.5 -1.2,-5.8 -1.4,-1.8 -1.3,-3.4 .9,-2.1 1.4,-3 .5,-2.9 -.5,-4.9 1,-13.6 3.5,-.6 3.7,1.4 1.2,2.7 h 2 l 2.4,-2.9 3.4,-17.5 46.2,8.2 40,6 -17.4,124.1 -37.3,-5.4 -64.2,-37.5 .5,-2.9 2,-1.8 z"></path>
+            <!--      <circle id="ArizonaDot" cx="200" cy="328" r="2" fill="black"/>-->
+            <foreignObject x="150" y="338" width="90" height="60">
+              <div id="ArizonaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="ArizonaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Arkansas" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="ArkansasPath" class="ar"
+                  d="m 584.2,367 .9,-2.2 1.2,.5 .7,-1 -.8,-.7 .3,-1.5 -1.1,-.9 .6,-1 -.1,-1.5 -1.1,-.1 .8,-.8 1.3,.8 .3,-1.4 -.4,-1.1 .1,-.7 2,.6 -.4,-1.5 1.6,-1.3 -.5,-.9 -1.1,.1 -.6,-.9 .9,-.9 1.6,-.2 .5,-.8 1.4,-.2 -.1,-.8 -.9,-.9 v -.5 h 1.5 l .4,-.7 -1.4,-1 -.1,-.6 -11.2,.8 2.8,-5.1 1.7,-1.5 v -2.2 l -1.6,-2.5 -39.8,2 -39.1,.7 4.1,24.4 -.7,39 2.6,2.3 2.8,-1.3 3.2,.8 .2,11.9 52.3,-1.3 1.2,-1.5 .5,-3 -1.5,-2.3 -.5,-2.2 .9,-.7 v -.8 l -1.7,-1.1 -.1,-.7 1.6,-.9 -1.2,-1.1 1.7,-7.1 3.4,-1.6 v -.8 l -1.1,-1.4 2.9,-5.4 h 1.9 l 1.5,-1.2 -.3,-5.2 3.1,-4.5 1.8,-.6 -.5,-3.1 z"></path>
+            <!--      <circle id="ArkansasDot" cx="545" cy="347" r="2" fill="black"/>-->
+            <foreignObject x="500" y="352" width="80" height="40">
+              <div id="ArkansasText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="ArkansasTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="California" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="CaliforniaPath" class="ca"
+                  d="m 69.4,365.6 3.4,5.2 -1.4,.1 -1.8,-1.9 z m 1.9,-9.8 1.8,4.1 2.6,1 .7,-.6 -1.3,-2.5 -2.6,-2.4 z m -19.9,-19 v 2.4 l 2,1.2 4.4,-.2 1,-1 -3.1,-.2 z m -5.9,.1 3.3,.5 1.4,2.2 h -3.8 z m 47.9,45.5 -1,-3 .2,-3 -.4,-7.9 -1.8,-4.8 -1.2,-1.4 -.6,-1.5 -7,-8.6 -3.6,.1 -2,-1.9 1.1,-1.8 -.7,-3.7 -2.2,-1.2 -3.9,-.6 -2.8,-1.3 -1.5,-1.9 -4.5,-6.6 -2.7,-2.2 -3.7,-.5 -3.1,-2.3 -4.7,-1.5 -2.8,-.3 -2.5,-2.5 .2,-2.8 .8,-4.8 1.8,-5.1 -1.4,-1.6 -4,-9.4 -2.7,-3.7 -.4,-3 -1.6,-2.3 .2,-2.5 -2,-5 -2.9,-2.7 .6,-7.1 2.4,-.8 1.8,-3.1 -.4,-3.2 -1,-.9 h -2.5 l -2.5,-3.3 -1.5,-3.5 v -7.5 l 1.2,-4.2 .2,-2.1 2.5,.2 -.1,1.6 -.8,.7 v 2.5 l 3.7,3.2 v -4.7 l -1.4,-3.4 .5,-1.1 -1,-1.7 2.8,-1.5 -1.9,-3 -1.4,.5 -1.5,3.8 .5,1.3 -.8,1 -.9,-.1 -5.4,-6.1 .7,-5.6 -1.1,-3.9 -6.5,-12.8 .8,-10.7 2.3,-3.6 .2,-6.4 -5.5,-11.1 .3,-5.2 6.9,-7.5 1.7,-2.4 -.1,-1.4 4,-9.2 .1,-8.4 .9,-2.5 66.1,18.6 -16.4,63.1 1.1,3.5 70.4,105 -.9,2.1 1.3,3.4 1.4,1.8 1.2,5.8 2.3,2.5 .4,1.9 -1.3,1.3 -4.8,1.7 -2.4,3.6 -1.6,7 -2.4,3.2 -1.6,.3 -1.1,6.9 1.1,1.6 1.8,.2 1,1.6 -.8,2.4 -3,2.2 -2.2,-.1 z"></path>
+            <!--      <circle id="CaliforniaDot" cx="72" cy="266" r="2" fill="black"/>-->
+            <foreignObject x="35" y="276" width="80" height="40">
+              <div id="CaliforniaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="CaliforniaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Colorado" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="ColoradoPath" class="co"
+                  d="m 374.6,323.3 -16.5,-1 -51.7,-4.8 -52.6,-6.5 11.5,-88.3 44.9,5.7 37.5,3.4 33.1,2.4 -1.4,22.1 z"></path>
+            <!--      <circle id="ColoradoDot" cx="316" cy="245" r="2" fill="black"/>-->
+            <foreignObject x="280" y="255" width="80" height="40">
+              <div id="ColoradoText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="ColoradoTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Connecticut" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="ConnecticutPath" class="ct"
+                  d="m 873.5,178.9 .4,-1.1 -3.2,-12.3 -.1,-.3 -14.9,3.4 v .7 l -.9,.3 -.5,-.7 -10.5,2.4 2.8,16.3 1.8,1.5 -3.5,3.4 1.7,2.2 5.4,-4.5 1.7,-1.3 h .8 l 2.4,-3.1 1.4,.1 2.9,-1.1 h 2.1 l 5.3,-2.7 2.8,-.9 1,-1 1.5,.5 z"></path>
+            <!--      <circle id="ConnecticutDot" cx="858" cy="175" r="2" fill="black"/>-->
+            <line x1="858" y1="175" x2="871" y2="221" stroke="black"/>
+            <line x1="871" y1="221" x2="910" y2="221" stroke="black"/>
+            <foreignObject x="873" y="205" width="250" height="15">
+              <div id="ConnecticutText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="ConnecticutTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Delaware" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="DelawarePath" class="de"
+                  d="m 822.2,226.6 -1.6,.3 -1.5,1.1 -1.2,2.1 7.6,27.1 10.9,-2.3 -2.2,-7.6 -1.1,.5 -3.3,-2.6 -.5,-1.7 -1.8,-1 -.2,-3.7 -2.1,-2.2 -1.1,-.8 -1.2,-1.1 -.4,-3.2 .3,-2.1 1,-2.2 z"></path>
+            <!--      <circle id="DelawareDot" cx="827" cy="248" r="2" fill="black"/>-->
+            <line x1="827" y1="248" x2="856" y2="281" stroke="black"/>
+            <line x1="856" y1="281" x2="895" y2="281" stroke="black"/>
+            \      <foreignObject x="857" y="263" width="250" height="15">
+            <div id="DelawareText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+            </div>
+          </foreignObject>
+            <foreignObject >
+              <div id="DelawareTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Florida" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="FloridaPath" class="fl"
+                  d="m 751.7,445.1 -4,-.7 -1.7,-.9 -2.2,1.4 v 2.5 l 1.4,2.1 -.5,4.3 -2.1,.6 -1,-1.1 -.6,-3.2 -50.1,3.3 -3.3,-6 -48.8,5.1 -.5,2.9 2.5,2.8 1.7,.7 .9,1.2 -.4,7.3 -1.1,.6 .5,.4 1,-.3 .7,-.8 10.5,-2.7 9.2,-.5 8.1,1.9 8.5,5 2.4,.8 2.2,2 -.1,2.7 h 2.4 l 1.9,-1 2.5,.1 2,-.8 2.9,-2 3.1,-2.9 1.1,-.4 .6,.5 h 1.4 l .5,-.8 -.5,-1.2 -.6,-.6 .2,-.8 2,-1.1 5,-.4 .8,1 1,.1 2.3,1 3,1.8 1.2,1.7 1.1,1.2 2.8,1.4 v 2.4 l 2.8,1.9 1,.1 1.6,1.4 .7,1.6 1,.2 .8,2.1 .7,.6 1,-1.1 2.9,.1 .5,1.4 1.1,.9 v 1.3 l 2.9,2.2 .2,9.6 -1.8,5.8 1,1.2 -.2,3.4 -.8,1.4 .7,1.2 2.3,2.3 .3,1.5 .8,1 -.4,-1.9 1.3,-.6 .8,-3.6 -3,-1.2 .1,-.6 2.6,-.4 .9,2.6 1.1,.6 .1,-2 1.1,.3 .6,.8 -.1,.7 -2.9,4.2 -.2,1.1 -1.7,1.9 v 1.1 l 3.7,3.8 5.3,7.9 1.8,2.1 v 1.8 l 2.8,4.6 2.3,.6 .7,-1.2 -2.1,.3 -3,-4.5 .2,-1.4 1.5,-.8 v -1.5 l -.6,-1.3 .9,-.9 .4,.9 .7,.5 v 4 l -1.2,-.6 -.8,.9 1.4,1.6 1,2.6 1.2,-.6 2.3,1.2 2.1,2.2 1.6,5.1 3.1,4.8 .8,-1.3 2.8,-.5 3.2,1.3 .3,1.7 3.3,3.8 .1,1.1 2.2,2.7 -.7,.5 v 2.7 l 2.7,1.4 h 1.5 l 2.7,-1.8 1.5,.3 1.1,.4 2.3,-1.7 .2,-.7 1.2,.3 2.4,-1.7 1.3,-2.3 -.7,-3.2 -.2,-1.3 1.1,-4 .6,-.2 .6,1.6 .8,-1.8 -.8,-7.2 -.4,-10.5 -1,-6.8 -.7,-1.7 -6.6,-11.1 -5.2,-9.1 -2.2,-3.3 -1.3,-3.6 -.2,-3.4 .9,-.3 v -.9 l -1.1,-2.2 -4,-4 -7.6,-9.7 -5.7,-10.4 -4.3,-10.7 -.6,-3.7 -1.2,-1 -.5,-3.8 z m 9.2,134.5 1.7,-.1 -.7,-1 z m 7.3,-1.1 v -.7 l 1.6,-.2 3.7,-3.3 1.5,-.6 2.4,-.9 .3,1.3 1.7,.8 -2.6,1.2 h -2.4 l -3.9,2.5 z m 17.2,-7.6 -3,1.4 -1,1.3 1.1,.1 z m 3.8,-2.9 -1.1,.3 -1.4,2 1.1,-.2 1.5,-1.6 z m 8.3,-15.7 -1.7,5.6 -.8,1 -1,2.6 -1.2,1.6 -.7,1.7 -1.9,2.2 v .9 l 2.7,-2.8 2.4,-3.5 .6,-2 2.1,-4.9 z"></path>
+            <!--      <circle id="FloridaDot" cx="776" cy="526" r="2" fill="black"/>-->
+            <line x1="776" y1="526" x2="811" y2="602" stroke="black"/>
+            <line x1="811" y1="602" x2="920" y2="602" stroke="black"/>
+            <foreignObject x="813" y="584" width="250" height="20">
+              <div id="FloridaText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="FloridaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Georgia" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="GeorgiaPath" class="ga"
+                  d="m 761.8,414.1 v 1.4 l -4.2,6.2 -1.2,.2 1.5,.5 v 2 l -.9,1.1 -.6,6 -2.3,6.2 .5,2 .7,5.1 -3.6,.3 -4,-.7 -1.7,-.9 -2.2,1.4 v 2.5 l 1.4,2.1 -.5,4.3 -2.1,.6 -1,-1.1 -.6,-3.2 -50.1,3.3 -3.3,-6 -.7,-2.2 -1.5,-1.5 -.5,-1.4 .6,-6.3 -2.4,-5.7 .5,-2.6 .3,-3.7 2.2,-3.8 -.2,-1.1 -1.7,-1 v -3.2 l -1.8,-1.9 -2.9,-6.1 -12.9,-45.8 22.9,-2.9 21.4,-3 -.1,1.9 -1.9,1 -1.4,3.2 .2,1.3 6.1,3.8 2.6,-.3 3.1,4 .4,1.7 4.2,5.1 2.6,1.7 1.4,.2 2.2,1.6 1.1,2.2 2,1.6 1.8,.5 2.7,2.7 .1,1.4 2.6,2.8 5,2.3 3.6,6.7 .3,2.7 3.9,2.1 2.5,4.8 .8,3.1 4.2,.4 z"></path>
+            <!--      <circle id="GeorgiaDot" cx="702" cy="381" r="2" fill="black"/>-->
+            <line x1="702" y1="400" x2="808" y2="485" stroke="black"/>
+            <line x1="808" y1="485" x2="960" y2="485" stroke="black"/>
+            <foreignObject x="808" y="468" width="150" height="60">
+              <div id="GeorgiaText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="GeorgiaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Hawaii" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="HawaiiPath" class="hi"
+                  d="m 317,553.7 -.2,3.2 1.7,1.9 .1,1.2 -4.8,4.5 -.1,1.2 1.9,3.2 1.7,4.2 v 2.6 l -.5,1.2 .1,3.4 4.1,2.1 1.1,1.1 1.2,-1.1 2.1,-3.6 4.5,-2.9 3.3,-.5 2.5,-1 1.7,-1.2 3.2,-3.5 -2.8,-1.1 -1.4,-1.4 .1,-1.7 -.5,-.6 h -2 l .2,-2.5 -.7,-1.2 -2.6,-2.3 -4.5,-1.9 -2.8,-.2 -3.3,-2.7 -1.2,-.6 z m -15.3,-17 -1.1,1.5 -.1,1.7 2.7,2.4 1.9,.5 .6,1 .4,3 3.6,.2 5.3,-2.6 -.1,-2.5 -1.4,-.5 -3.5,-2.6 -1.8,-.3 -2.9,1.3 -1.5,-2.7 z m -1.5,11.5 .9,-1.4 2.5,-.3 .6,1.8 z m -7,-8.7 1.7,4 3.1,-.6 .3,-2 -1.4,-1.5 z m -4.1,-6.7 -1.1,2.4 h 5 l 4.8,1.6 2.5,-1.6 .2,-1.5 -4.8,.2 z m -16,-10.6 -1.9,2.1 -2.9,.6 .8,2.2 2.2,2.8 .1,1 2.1,-.3 2.3,.1 1.7,1.2 3.5,-.8 v -.7 l -1,-.8 -.5,-2.1 -.8,-.3 -.5,1 -1.2,-1.3 .2,-1.4 -1.8,-3.3 -1.1,-.7 z m -31.8,-12.4 -4.2,2.9 .2,2.3 2.4,1.2 1.9,1.3 2.7,.4 2.6,-2.2 -.2,-1.9 .8,-1.7 v -1.4 l -1,-.9 z m -10.8,4.8 -.3,1.2 -1.9,.9 -.6,1.8 1,.8 1.1,-1.5 1.9,-.6 .4,-2.6 z"></path>
+            <!--      <circle id="HawaiiDot" cx="323" cy="567" r="2" fill="black"/>-->
+            <line x1="323" y1="567" x2="297" y2="619" stroke="black"/>
+            <line x1="297" y1="619" x2="460" y2="619" stroke="black"/>
+
+            <foreignObject x="310" y="604" width="250" height="15">
+              <div id="HawaiiText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="HawaiiTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Idaho" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="IdahoPath" class="id"
+                  d="m 165.3,183.1 -24.4,-5.4 8.5,-37.3 2.9,-5.8 .4,-2.1 .8,-.9 -.9,-2 -2.9,-1.2 .2,-4.2 4,-5.8 2.5,-.8 1.6,-2.3 -.1,-1.6 1.8,-1.6 3.2,-5.5 4.2,-4.8 -.5,-3.2 -3.5,-3.1 -1.6,-3.6 1.1,-4.3 -.7,-4 12.7,-56.1 14.2,3 -4.8,22 3.7,7.4 -1.6,4.8 3.6,4.8 1.9,.7 3.9,8.3 v 2.1 l 2.3,3 h .9 l 1.4,2.1 h 3.2 v 1.6 l -7.1,17 -.5,4.1 1.4,.5 1.6,2.6 2.8,-1.4 3.6,-2.4 1.9,1.9 .5,2.5 -.5,3.2 2.5,9.7 2.6,3.5 2.3,1.4 .4,3 v 4.1 l 2.3,2.3 1.6,-2.3 6.9,1.6 2.1,-1.2 9,1.7 2.8,-3.3 1.8,-.6 1.2,1.8 1.6,4.1 .9,.1 -8.5,54.8 -47.9,-8.2 z"></path>
+            <!--      <circle id="IdahoDot" cx="178" cy="122" r="2" fill="black"/>-->
+            <foreignObject x="145" y="150" width="90" height="40">
+              <div id="IdahoText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="IdahoTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Illinois" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="IllinoisPath" class="il"
+                  d="m 623.5,265.9 -1,5.2 v 2 l 2.4,3.5 v .7 l -.3,.9 .9,1.9 -.3,2.4 -1.6,1.8 -1.3,4.2 -3.8,5.3 -.1,7 h -1 l .9,1.9 v .9 l -2.2,2.7 .1,1.1 1.5,2.2 -.1,.9 -3.7,.6 -.6,1.2 -1.2,-.6 -1,.5 -.4,3.3 1.7,1.8 -.4,2.4 -1.5,.3 -6.9,-3 -4,3.7 .3,1.8 h -2.8 l -1.4,-1.5 -1.8,-3.8 v -1.9 l .8,-.6 .1,-1.3 -1.7,-1.9 -.9,-2.5 -2.7,-4.1 -4.8,-1.3 -7.4,-7.1 -.4,-2.4 2.8,-7.6 -.4,-1.9 1.2,-1.1 v -1.3 l -2.8,-1.5 -3,-.7 -3.4,1.2 -1.3,-2.3 .6,-1.9 -.7,-2.4 -8.6,-8.4 -2.2,-1.5 -2.5,-5.9 -1.2,-5.4 1.4,-3.7 .7,-.7 .1,-2.3 -.7,-.9 1,-1.5 1.8,-.6 .9,-.3 1,-1.2 v -2.4 l 1.7,-2.4 .5,-.5 .1,-3.5 -.9,-1.4 -1,-.3 -1.1,-1.6 1,-4 3,-.8 h 2.4 l 4.2,-1.8 1.7,-2.2 .1,-2.4 1.1,-1.3 1.3,-3.2 -.1,-2.6 -2.8,-3.5 h -1.2 l -.9,-1.1 .2,-1.6 -1.7,-1.7 -2.5,-1.3 .5,-.6 45.9,-2.8 .1,4.6 3.4,4.6 1.2,4.1 1.6,3.2 z"></path>
+            <!--      <circle id="IllinoisDot" cx="594" cy="224" r="2" fill="black"/>-->
+            <foreignObject visibility="hidden" x="574" y="229" width="40" height="40">
+              <div id="IllinoisText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="IllinoisTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Indiana" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="IndianaPath" class="in"
+                  d="m 629.2,214.8 -5.1,2.3 -4.7,-1.4 4.1,50.2 -1,5.2 v 2 l 2.4,3.5 v .7 l -.3,.9 .9,1.9 -.3,2.4 -1.6,1.8 -1.3,4.2 -3.8,5.3 -.1,7 h -1 l .9,1.9 1.1,.8 .6,-1 -.7,-1.7 4.6,-.5 .2,1.2 1.1,.2 .4,-.9 -.6,-1.3 .3,-.8 1.3,.8 1.7,-.4 1.7,.6 3.4,2.1 1.8,-2.8 3.5,-2.2 3,3.3 1.6,-2.1 .3,-2.7 3.8,-2.3 .2,1.3 1.9,1.2 3,-.2 1.2,-.7 .1,-3.4 2.5,-3.7 4.6,-4.4 -.1,-1.7 1.2,-3.8 2.2,1 6.7,-4.5 -.4,-1.7 -1.5,-2.1 1,-1.9 -6.6,-57.2 -.1,-1.4 -32.4,3.4 z"></path>
+            <!--      <circle id="IndianaDot" cx="642" cy="250" r="2" fill="black"/>-->
+            <foreignObject visibility="hidden" x="602" y="250" width="80" height="40">
+              <div id="IndianaText"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject >
+              <div id="IndianaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Iowa" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="IowaPath" class="ia"
+                  d="m 556.9,183 2.1,1.6 .6,1.1 -1.6,3.3 -.1,2.5 2,5.5 2.7,1.5 3.3,.7 1.3,2.8 -.5,.6 2.5,1.3 1.7,1.7 -.2,1.6 .9,1.1 h 1.2 l 2.8,3.5 .1,2.6 -1.3,3.2 -1.1,1.3 -.1,2.4 -1.7,2.2 -4.2,1.8 h -2.4 l -3,.8 -1,4 1.1,1.6 1,.3 .9,1.4 -.1,3.5 -.5,.5 -1.7,2.4 v 2.4 l -1,1.2 -.9,.3 -1.8,.6 -1,1.5 .7,.9 -.1,2.3 -.7,.7 -1.5,-.8 -1.1,-1.1 -.6,-1.6 -1.7,-1.3 -14.3,.8 -27.2,1.2 -25.9,-.1 -1.8,-4.4 .7,-2.2 -.8,-3.3 .2,-2.9 -1.3,-.7 -.4,-6.1 -2.8,-5 -.2,-3.7 -2.2,-4.3 -1.3,-3.7 v -1.4 l -.6,-1.7 v -2.3 l -.5,-.9 -.7,-1.7 -.3,-1.3 -1.3,-1.2 1,-4.3 1.7,-5.1 -.7,-2 -1.3,-.4 -.4,-1.6 1,-.5 .1,-1.1 -1.3,-1.5 .1,-1.6 2.2,.1 h 28.2 l 36.3,-.9 18.6,-.7 z"></path>
+            <!--      <circle id="IowaDot" cx="516" cy="193" r="2" fill="black"/>-->
+            <foreignObject x="480" y="200" width="90" height="40">
+              <div id="IowaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="IowaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Kansas" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="KansasPath" class="ks"
+                  d="m 459.1,259.5 -43.7,-1.2 -36,-2 -4.8,67 67.7,2.9 62,.1 -.5,-48.1 -3.2,-.7 -2.6,-4.7 -2.5,-2.5 .5,-2.3 2.7,-2.6 .1,-1.2 -1.5,-2.1 -.9,1 -2,-.6 -2.9,-3 z"></path>
+            <!--      <circle id="KansasDot" cx="434" cy="271" r="2" fill="black"/>-->
+            <foreignObject x="400" y="281" width="80" height="40">
+              <div id="KansasText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="KansasTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Kentucky" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="Kentucky" Path class="ky"
+                  d="m 692.1,322.5 -20.5,1.4 -5.2,.8 -17.4,1 -2.6,.8 -22.6,2 -.7,-.6 h -3.7 l 1.2,3.2 -.6,.9 -23.3,1.5 1,-2.7 1.4,.9 .7,-.4 1.2,-4.1 -1,-1 1,-2 .2,-.9 -1.3,-.8 -.3,-1.8 4,-3.7 6.9,3 1.5,-.3 .4,-2.4 -1.7,-1.8 .4,-3.3 1,-.5 1.2,.6 .6,-1.2 3.7,-.6 .1,-.9 -1.5,-2.2 -.1,-1.1 2.2,-2.7 0,-.9 1.1,.8 .6,-1 -.7,-1.7 4.6,-.5 .2,1.2 1.1,.2 .4,-.9 -.6,-1.3 .3,-.8 1.3,.8 1.7,-.4 1.7,.6 3.4,2.1 1.8,-2.8 3.5,-2.2 3,3.3 1.6,-2.1 .3,-2.7 3.8,-2.3 .2,1.3 1.9,1.2 3,-.2 1.2,-.7 .1,-3.4 2.5,-3.7 4.6,-4.4 -.1,-1.7 1.2,-3.8 2.2,1 6.7,-4.5 -.4,-1.7 -1.5,-2.1 1,-1.9 1.3,.5 2.2,.1 1.9,-.8 2.9,1.2 2.2,3.4 v 1 l 4.1,.7 2.3,-.2 1.9,2.1 2.2,.2 v -1 l 1.9,-.8 3,.8 1.2,.8 1.3,-.7 h .9 l .6,-1.7 3.4,-1.8 .5,.8 .8,2.9 3.5,1.4 1.2,2.1 -.1,1.1 .6,1 -.6,3.6 1.9,1.6 .8,1.1 1,.6 -.1,.9 4.4,5.6 h 1.4 l 1.5,1.8 1.2,.3 1.4,-.1 -4.9,6.6 -2.9,1 -3,3 -.4,2.2 -2.1,1.3 -.1,1.7 -1.4,1.4 -1.8,.5 -.5,1.9 -1,.4 -6.9,4.2 z m -98,11.3 -.7,-.7 .2,-1 h 1.1 l .7,.7 -.3,1 z"></path>
+            <!--      <circle id="KentuckyDot" cx="682" cy="282" r="2" fill="black"/>-->
+            <foreignObject visibility="hidden" x="642" y="282" width="80" height="40">
+              <div id="KentuckyText"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="KentuckyTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Louisiana" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="LouisianaPath" class="la"
+                  d="m 602.5,472.8 -1.2,-1.8 .3,-1.3 -4.8,-6.8 .9,-4.6 1,-1.4 .1,-1.4 -36,2 1.7,-11.9 2.4,-4.8 6,-8.4 -1.8,-2.5 h 2 v -3.3 l -2.4,-2.5 .5,-1.7 -1.2,-1 -1.6,-7.1 .6,-1.4 -52.3,1.3 .5,19.9 .7,3.4 2.6,2.8 .7,5.4 3.8,4.6 .8,4.3 h 1 l -.1,7.3 -3.3,6.4 1.3,2.3 -1.3,1.5 .7,3 -.1,4.3 -2.2,3.5 -.1,.8 -1.7,1.2 1,1.8 1.2,1.1 1.6,-1.3 5.3,-.9 6.1,-.1 9.6,3.8 8,1 1.5,-1.4 1.8,-.2 4.8,2.2 1.6,-.4 1.1,-1.5 -4.2,-1.8 -2.2,1 -1.1,-.2 -1.4,-2 3.3,-2.2 1.6,-.1 v 1.7 l 1.5,-.1 3.4,-.3 .4,2.3 1.1,.4 .6,1.9 4.8,1 1.7,1.6 v .7 h -1.2 l -1.5,1.7 1.7,1.2 5.4,1 2.7,2.8 4.4,-1 -3.7,.2 -.1,-.6 2.8,-.7 .2,-1.8 1.2,-.3 v -1.4 l 1.1,.1 v 1.6 l 2.5,.1 .8,-1.9 .9,.3 .2,2.5 1.2,.2 -1.8,2 2.6,-.9 2,-1.1 2.9,-3.3 h -.7 l -1.3,1.2 -.4,-.1 -.5,-.8 .9,-1.2 v -2.3 l 1.1,-.8 .7,.7 1,-.8 1,-.1 .6,1.3 -.6,1.9 h 2.4 l 5.1,1.7 .5,1.3 1.6,1.4 2.8,.1 1.3,.7 1.8,-1 .9,-1.7 v -1.7 h -1.4 l -1.2,-1.4 -1.1,-1.1 -3.2,-.9 -2.6,.2 -4.2,-2.4 v -2.3 l 1.3,-1 2.4,.6 -3.1,-1.6 .2,-.8 h 3.6 l 2.6,-3.5 -2.6,-1.8 .8,-1.5 -1.2,-.8 h -.8 l -2,2.1 v 2.1 l -.6,.7 -1.1,-.1 -1.6,-1.4 h -1.3 v -1.5 l .6,-.7 .8,.7 1.7,-1.6 .7,-1.6 .8,-.3 z m -10.3,-2.7 1.9,1 .8,1.1 2.5,.1 1.5,.8 .2,1.4 -.4,.6 -.9,-1.5 -1.4,1.2 -.9,1.4 -2.8,.8 -1.6,.1 -3.7,-1 .1,-1.7 2,-2 1.1,-2.4 z m -4.7,1.2 v 1.1 l -1.8,2 h -1.2 v -2.2 l 1.6,-1.5 z"></path>
+            <!--      <circle id="LouisianaDot" cx="543" cy="448" r="2" fill="black"/>-->
+            <line x1="543" y1="448" x2="479" y2="590" stroke="black"/>
+            <line x1="479" y1="590" x2="580" y2="590" stroke="black"/>
+            <foreignObject x="487" y="573" width="250" height="20">
+              <div id="LouisianaText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="LouisianaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Maine" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MainePath" class="me"
+                  d="m 875,128.7 .6,4 3.2,2 .8,2.2 2.3,1.4 1.4,-.3 1,-3 -.8,-2.9 1.6,-.9 .5,-2.8 -.6,-1.3 3.3,-1.9 -2.2,-2.3 .9,-2.4 1.4,-2.2 .5,3.2 1.6,-2 1.3,.9 1.2,-.8 v -1.7 l 3.2,-1.3 .3,-2.9 2.5,-.2 2.7,-3.7 v -.7 l -.9,-.5 -.1,-3.3 .6,-1.1 .2,1.6 1,-.5 -.2,-3.2 -.9,.3 -.1,1.2 -1.2,-1.4 .9,-1.4 .6,.1 1.1,-.4 .5,2.8 2,-.3 2.9,.7 v -1 l -1.1,-1.2 1.3,.1 .1,-2.3 .6,.8 .3,1.9 2.1,1.5 .2,-1 .9,-.2 -.3,-.8 .8,-.6 -.1,-1.6 -1.6,-.2 -2,.7 1.4,-1.6 .7,-.8 1.3,-.2 .4,1.3 1.7,1.6 .4,-2.1 2.3,-1.2 -.9,-1.3 .1,-1.7 1.1,.5 h .7 l 1.7,-1.4 .4,-2.3 2.2,.3 .1,-.7 .2,-1.6 .5,1.4 1.5,-1 2.3,-4.1 -.1,-2.2 -1.4,-2 -3,-3.2 h -1.9 l -.8,2.2 -2.9,-3 .3,-.8 v -1.5 l -1.6,-4.5 -.8,-.2 -.7,.4 h -4.8 l -.3,-3.6 -8.1,-26 -7.3,-3.7 -2.9,-.1 -6.7,6.6 -2.7,-1 -1,-3.9 h -2.7 l -6.9,19.5 .7,6.2 -1.7,2.4 -.4,4.6 1.3,3.7 .8,.2 v 1.6 l -1.6,4.5 -1.5,1.4 -1.3,2.2 -.4,7.8 -2.4,-1 -1.5,.4 z m 34.6,-24.7 -1,.8 v 1.3 l .7,-.8 .9,.8 .4,-.5 1.1,.2 -1,-.8 .4,-.8 z m -1.7,2.6 -1,1.1 .5,.4 -.1,1 h 1.1 v -1.8 z m -3,-1.6 .9,1.3 1,.5 .3,-1 v -1.8 l -1.3,-.7 -.4,1.2 z m -1,5 -1.7,-1.7 1.6,-2.4 .8,.3 .2,1.1 1,.8 v 1.1 l -1,1 z"></path>
+            <!--      <circle id="MaineDot" cx="891" cy="77" r="2" fill="black"/>-->
+            <line x1="891" y1="77" x2="860" y2="60" stroke="black"/>
+            <line x1="860" y1="60" x2="750" y2="60" stroke="black"/>
+            <foreignObject x="750" y="40" width="250" height="15">
+              <div id="MaineText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MaineTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Maryland" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MarylandPat" class="md"
+                  d="m 822.9,269.3 0,-1.7 h -.8 l 0,1.8 z m 11.8,-3.9 1.2,-2.2 .1,-2.5 -.6,-.6 -.7,.9 -.2,2.1 -.8,1.4 -.3,1.1 -4.6,1.6 -.7,.8 -1.3,.2 -.4,.9 -1.3,.6 -.3,-2.5 .4,-.7 -.8,-.5 .2,-1.5 -1.6,1 v -2 l 1.2,-.3 -1.9,-.4 -.7,-.8 .4,-1.3 -.8,-.6 -.7,1.6 .5,.8 -.7,.6 -1.1,.5 -2,-1 -.2,-1.2 -1,-1.1 -1.4,-1.7 1.5,-.8 -1,-.6 v -.9 l .6,-1 1.7,-.3 -1.4,-.6 -.1,-.7 -1.3,-.1 -.4,1.1 -.6,.3 .1,-3.4 1,-1 .8,.7 .1,-1.6 -1,-.9 -.9,1.1 -1,1.4 -.6,-1 .2,-2.4 .9,-1 .9,.9 1.2,-.7 -.4,-1.7 -1,1 -.9,-2.1 -.2,-1.7 1.1,-2.4 1.1,-1.4 1.4,-.2 -.5,-.8 .5,-.6 -.3,-.7 .2,-2.1 -1.5,.4 -.8,1.1 1,1.3 -2.6,3.6 -.9,-.4 -.7,.9 -.6,2.2 -1.8,.5 1.3,.6 1.3,1.3 -.2,.7 .9,1.2 -1.1,1 .5,.3 -.5,1.3 v 2.1 l -.5,1.3 .9,1.1 .7,3.4 1.3,1.4 1.6,1.4 .4,2.8 1.6,2 .4,1.4 v 1 h -.7 l -1.5,-1.2 -.4,.2 -1.2,-.2 -1.7,-1.4 -1.4,-.3 -1,.5 -1.2,-.3 -.4,.2 -1.7,-.8 -1,-1 -1,-1.3 -.6,-.2 -.8,.7 -1.6,1.3 -1.1,-.8 -.4,-2.3 .8,-2.1 -.3,-.5 .3,-.4 -.7,-1 1,-.1 1,-.9 .4,-1.8 1.7,-2.6 -2.6,-1.8 -1,1.7 -.6,-.6 h -1 l -.6,-.1 -.4,-.4 .1,-.5 -1.7,-.6 -.8,.3 -1.2,-.1 -.7,-.7 -.5,-.2 -.2,-.7 .6,-.8 v -.9 l -1.2,-.2 -1,-.9 -.9,.1 -1.6,-.3 -.9,-.4 .2,-1.6 -1,-.5 -.2,-.7 h -.7 l -.8,-1.2 .2,-1 -2.6,.4 -2.2,-1.6 -1.4,.3 -.9,1.4 h -1.3 l -1.7,2.9 -3.3,.4 -1.9,-1 -2.6,3.8 -2.2,-.3 -3.1,3.9 -.9,1.6 -1.8,1.6 -1.7,-11.4 60.5,-11.8 7.6,27.1 10.9,-2.3 0,5.3 -.1,3.1 -1,1.8 z m -13.4,-1.8 -1.3,.9 .8,1.8 1.7,.8 -.4,-1.6 z"></path>
+            <!--      <circle id="MarylandDot" cx="801" cy="240" r="2" fill="black"/>-->
+            <line x1="801" y1="240" x2="849" y2="300" stroke="black"/>
+            <line x1="849" y1="300" x2="910" y2="300" stroke="black"/>
+            <foreignObject x="849" y="283" width="80" height="40">
+              <div id="MarylandText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MarylandTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Massachusetts" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MassachusettsPath" class="ma"
+                  d="m 899.9,174.2 h 3.4 l .9,-.6 .1,-1.3 -1.9,-1.8 .4,1 -1.5,1.5 h -2.3 l .1,.8 z m -9,1.8 -1.2,-.6 1,-.8 .6,-2.1 1.2,-1 .8,-.2 .6,.9 1.1,.2 .6,-.6 .5,1.9 -1.3,.3 -2.8,.7 z m -34.9,-23.4 18.4,-3.8 1,-1.5 .3,-1.7 1.9,-.6 .5,-1.1 1.7,-1.1 1.3,.3 1.7,3.3 1,.4 1.1,-1.3 .8,1.3 v 1.1 l -3,2.4 .2,.8 -.9,1 .4,.8 -1.3,.3 .9,1.2 -.8,.7 .6,1 .9,-.2 .3,-.8 1.1,.6 h 1.8 l 2.5,2.6 .2,2.6 1.8,.1 .8,1.1 .6,2 1,.7 h 1.9 l 1.9,-.1 .8,-.9 1.6,-1.2 1.1,-.3 -1.2,-2.1 -.3,.9 -1.5,-3.6 h -.8 l -.4,.9 -1.2,-1 1.3,-1.1 1.8,.4 2.3,2.1 1.3,2.7 1.2,3.3 -1,2.8 v -1.8 l -.7,-1 -3.5,2.3 -.9,-.3 -1.6,1 -.1,1.2 -2.2,1.2 -2,2.1 -2,1.9 h -1.2 l 3.3,-3.3 .5,-1.9 -.5,-.6 -.3,-1.3 -.9,-.1 -.1,1.3 -1,1.2 h -1.2 l -.3,1.1 .4,1.2 -1.2,1.1 -1.1,-.2 -.4,1 -1.4,-3 -1.3,-1.1 -2.6,-1.3 -.6,-2.2 h -.8 l -.7,-2.6 -6.5,2 -.1,-.3 -14.9,3.4 v .7 l -.9,.3 -.5,-.7 -10.5,2.4 -.7,-1 .5,-15 z"></path>
+            <!--      <circle id="MassachusettsDot" cx="858" cy="158" r="2" fill="black"/>-->
+            <line x1="858" y1="158" x2="935" y2="158" stroke="black"/>
+            <foreignObject x="906" y="141" width="250" height="15">
+              <div id="MassachusettsText" class="text-decoration"
+                   xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MassachusettsTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Michigan" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MichiganPath" class="mi"
+                  d="m 663.3,209.8 .1,1.4 21.4,-3.5 .5,-1.2 3.9,-5.9 v -4.3 l .8,-2.1 2.2,-.8 2,-7.8 1,-.5 1,.6 -.2,.6 -1.1,.8 .3,.9 .8,.4 1.9,-1.4 .4,-9.8 -1.6,-2.3 -1.2,-3.7 v -2.5 l -2.3,-4.4 v -1.8 l -1.2,-3.3 -2.3,-3 -2.9,-1 -4.8,3 -2.5,4.6 -.2,.9 -3,3.5 -1.5,-.2 -2.9,-2.8 -.1,-3.4 1.5,-1.9 2,-.2 1.2,-1.7 .2,-4 .8,-.8 1.1,-.1 .9,-1.7 -.2,-9.6 -.3,-1.3 -1.2,-1.2 -1.7,-1 -.1,-1.8 .7,-.6 1.8,.8 -.3,-1.7 -1.9,-2.7 -.7,-1.6 -1.1,-1.1 h -2.2 l -8.1,-2.9 -1.4,-1.7 -3.1,-.3 -1.2,.3 -4.4,-2.3 h -1.4 l .5,1 -2.7,-.1 .1,.6 .6,.6 -2.5,2.1 .1,1.8 1.5,2.3 1.5,.2 v .6 l -1.5,.5 -2.1,-.1 -2.8,2.5 .1,2.5 .4,5.8 -2.2,3.4 .8,-4.5 -.8,-.6 -.9,5.3 -1,-2.3 .5,-2.3 -.5,-1 .6,-1.3 -.6,-1.1 1,-1 v -1.2 l -1.3,.6 -1.3,3.1 -.7,.7 -1.3,2.4 -1.7,-.2 -.1,1.2 h -1.6 l .2,1.5 .2,2 -3,1.2 .1,1.3 1,1.7 -.1,5.2 -1.3,4.4 -1.7,2.5 1.2,1.4 .8,3.5 -1,2.5 -.2,2.1 1.7,3.4 2.5,4.9 1.2,1.9 1.6,6.9 -.1,8.8 -.9,3.9 -2,3.2 -.9,3.7 -2,3 -1.2,1 z m -95.8,-96.8 3,3.8 17,3.8 1.4,1 4,.8 .7,.5 2.8,-.2 4.9,.8 1.4,1.5 -1,1 .8,.8 3.8,.7 1.2,1.2 .1,4.4 -1.3,2.8 2,.1 1,-.8 .9,.8 -1.1,3.1 1,1.6 1.2,.3 .8,-1.8 2.9,-4.6 1.6,-6 2.3,-2 -.5,-1.6 .5,-.9 1,1.6 -.3,2.2 2.9,-2.2 .2,-2.3 2.1,.6 .8,-1.6 .7,.6 -.7,1.5 -1,.5 -1,2 1.4,1.8 1.1,-.5 -.5,-.7 1,-1.5 1.9,-1.7 h .8 l .2,-2.6 2,-1.8 7.9,-.5 1.9,-3.1 3.8,-.3 3.8,1.2 4.2,2.7 .7,-.2 -.2,-3.5 .7,-.2 4.5,1.1 1.5,-.2 2.9,-.7 1.7,.4 1.8,.1 v -1.1 l -.7,-.9 -1.5,-.2 -1.1,-.8 .5,-1.4 -.8,-.3 -2.6,.1 -.1,-1 1.1,-.8 .6,.8 .5,-1.8 -.7,-.7 .7,-.2 -1.4,-1.3 .3,-1.3 .1,-1.9 h -1.3 l -1.5,1 -1.9,.1 -.5,1.8 -1.9,.2 -.3,-1.2 -2.2,.1 -1,1.2 -.7,-.1 -.2,-.8 -2.6,.4 -.1,-4.8 1,-2 -.7,-.1 -1.8,1.1 h -2.2 l -3.8,2.7 -6.2,.3 -4.1,.8 -1.9,1.5 -1.4,1.3 -2.5,1.7 -.3,.8 -.6,-1.7 -1.3,-.6 v .6 l .7,.7 v 1.3 l -1.5,-.6 h -.6 l -.3,1.2 -2,-1.9 -1.3,-.2 -1.3,1.5 -3.2,-.1 -.5,-1.4 -2,-1.9 -1.3,-1.6 v -.7 l -1.1,-1.4 -2.6,-1.2 -3.3,-.1 -1.1,-.9 h -1.4 l -.7,.4 -2.2,2.2 -.7,1.1 -1,-.7 .2,-1 .8,-2.1 3.2,-5 .8,-.2 1.7,-1.9 .7,-1.6 3,-.6 .8,-.6 -.1,-1 -.5,-.5 -4.5,.2 -2,.5 -2.6,1.2 -1.2,1.2 -1.7,2.2 -1.8,1 -3.3,3.4 -.4,1.6 -7.4,4.6 -4,.5 -1.8,.4 -2.3,3 -1.8,.7 -4.4,2.3 z m 100.7,3.8 3.8,.1 .6,-.5 -.2,-2 -1.7,-1.8 -1.9,.1 -.1,.5 1.1,.4 -1.6,.8 -.3,1 -.6,-.6 -.4,.8 z m -75.1,-41.9 -2.3,.2 -2.7,1.9 -7.1,5.3 .8,1 1.8,.3 2.8,-2 -1.1,-.5 2.3,-1.6 h 1 l 3,-1.9 -.1,-.9 z m 41.1,62.8 v 1 l 2.1,1.6 -.2,-2.4 z m -.7,2.8 1.1,.1 v .9 h -1 z m 21.4,-21.3 v .9 l .8,-.2 v -.5 z m 4.7,3.1 -.1,-1.1 -1.6,-.2 -.6,-.4 h -.9 l -.4,.3 .9,.4 1.1,1.1 z m -18,1.2 -.1,1.1 -.3,.7 .2,2.2 .4,.3 .7,.1 .5,-.9 .1,-1.6 -.3,-.6 -.1,-1.1 z"></path>
+            <!--      <circle id="MichiganDot" cx="661" cy="158" r="2" fill="black"/>-->
+            <foreignObject x="631" y="163" width="80" height="40">
+              <div id="MichiganText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MichiganTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Minnesota" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MinnesotaPath" class="mn"
+                  d="m 464.7,68.6 -1.1,2.8 .8,1.4 -.3,5.1 -.5,1.1 2.7,9.1 1.3,2.5 .7,14 1,2.7 -.4,5.8 2.9,7.4 .3,5.8 -.1,2.1 -.1,2.2 -.9,2 -3.1,1.9 -.3,1.2 1.7,2.5 .4,1.8 2.6,.6 1.5,1.9 -.2,39.5 h 28.2 l 36.3,-.9 18.6,-.7 -1.1,-4.5 -.2,-3 -2.2,-3 -2.8,-.7 -5.2,-3.6 -.6,-3.3 -6.3,-3.1 -.2,-1.3 h -3.3 l -2.2,-2.6 -2,-1.3 .7,-5.1 -.9,-1.6 .5,-5.4 1,-1.8 -.3,-2.7 -1.2,-1.3 -1.8,-.3 v -1.7 l 2.8,-5.8 5.9,-3.9 -.4,-13 .9,.4 .6,-.5 .1,-1.1 .9,-.6 1.4,1.2 .7,-.1 v 0 l -1.2,-2.2 4.3,-3.1 3.1,-3.7 1.6,-.8 4.7,-5.9 6.3,-5.8 3.9,-2.1 6.3,-2.7 7.6,-4.5 -.6,-.4 -3.7,.7 -2.8,.1 -1,-1.6 -1.4,-.9 -9.8,1.2 -1,-2.8 -1.6,-.1 -1.7,.8 -3.7,3.1 h -4.1 l -2.1,-1 -.3,-1.7 -3.9,-.8 -.6,-1.6 -.7,-1.3 -1,.9 -2.6,.1 -9.9,-5.5 h -2.9 l -.8,-.7 -3.1,1.3 -.8,1.3 -3.3,.8 -1.3,-.2 v -1.7 l -.7,-.9 h -5.9 l -.4,-1.4 h -2.6 l -1.1,.4 -2.4,-1.7 .3,-1.4 -.6,-2.4 -.7,-1.1 -.2,-3 -1,-3.1 -2.1,-1.6 h -2.9 l .1,8 -30.9,-.4 z"></path>
+            <!--      <circle id="MinnesotaDot" cx="500" cy="83" r="2" fill="black"/>-->
+            <foreignObject x="470" y="90" width="80" height="40">
+              <div id="MinnesotaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MinnesotaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Mississippi" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MississippiPath" class="ms"
+                  d="m 623.8,468.6 -5,.1 -2.4,-1.5 -7.9,2.5 -.9,-.7 -.5,.2 -.1,1.6 -.6,.1 -2.6,2.7 -.7,-.1 -.6,-.7 -1.2,-1.8 .3,-1.3 -4.8,-6.8 .9,-4.6 1,-1.4 .1,-1.4 -36,2 1.7,-11.9 2.4,-4.8 6,-8.4 -1.8,-2.5 h 2 v -3.3 l -2.4,-2.5 .5,-1.7 -1.2,-1 -1.6,-7.1 .6,-1.4 1.2,-1.5 .5,-3 -1.5,-2.3 -.5,-2.2 .9,-.7 v -.8 l -1.7,-1.1 -.1,-.7 1.6,-.9 -1.2,-1.1 1.7,-7.1 3.4,-1.6 v -.8 l -1.1,-1.4 2.9,-5.4 h 1.9 l 1.5,-1.2 -.3,-5.2 3.1,-4.5 1.8,-.6 -.5,-3.1 38.3,-2.6 1.3,2 -1.3,67 4.4,33.2 z"></path>
+            <!--      <circle id="MississippiDot" cx="597" cy="410" r="2" fill="black"/>-->
+            <line x1="597" y1="410" x2="518" y2="564" stroke="black"/>
+            <line x1="518" y1="564" x2="605" y2="564" stroke="black"/>
+            <foreignObject x="525" y="548" width="250" height="15">
+              <div id="MississippiText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MississippiTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Missouri" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MissouriPath" class="mo"
+                  d="m 555.3,248.9 -1.1,-1.1 -.6,-1.6 -1.7,-1.3 -14.3,.8 -27.2,1.2 -25.9,-.1 1.3,1.3 -.3,1.4 2.1,3.7 3.9,6.3 2.9,3 2,.6 .9,-1 1.5,2.1 -.1,1.2 -2.7,2.6 -.5,2.3 2.5,2.5 2.6,4.7 3.2,.7 .5,48.1 .2,10.8 39.1,-.7 39.8,-2 1.6,2.5 v 2.2 l -1.7,1.5 -2.8,5.1 11.2,-.8 1,-2 1.2,-.5 v -.7 l -1.2,-1.1 -.6,-1 1.7,.2 .8,-.7 -1.4,-1.5 1.4,-.5 .1,-1 -.6,-1 v -1.3 l -.7,-.7 .2,-1 h 1.1 l .7,.7 -.3,1 .8,.7 .8,-1 1,-2.7 1.4,.9 .7,-.4 1.2,-4.1 -1,-1 1,-2 .2,-.9 -1.3,-.8 h -2.8 l -1.4,-1.5 -1.8,-3.8 v -1.9 l .8,-.6 .1,-1.3 -1.7,-1.9 -.9,-2.5 -2.7,-4.1 -4.8,-1.3 -7.4,-7.1 -.4,-2.4 2.8,-7.6 -.4,-1.9 1.2,-1.1 v -1.3 l -2.8,-1.5 -3,-.7 -3.4,1.2 -1.3,-2.3 .6,-1.9 -.7,-2.4 -8.6,-8.4 -2.2,-1.5 -2.5,-5.9 -1.2,-5.4 1.4,-3.7 z"></path>
+            <!--      <circle id="MissouriDot" cx="526" cy="275" r="2" fill="black"/>-->
+            <foreignObject x="495" y="280" width="80" height="40">
+              <div id="MissouriText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MissouriTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Montana" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="MontanaPath" class="mt"
+                  d="m 247,130.5 57.3,7.9 51,5.3 2,-20.7 5.2,-66.7 -53.5,-5.6 -54.3,-7.7 -65.9,-12.5 -4.8,22 3.7,7.4 -1.6,4.8 3.6,4.8 1.9,.7 3.9,8.3 v 2.1 l 2.3,3 h .9 l 1.4,2.1 h 3.2 v 1.6 l -7.1,17 -.5,4.1 1.4,.5 1.6,2.6 2.8,-1.4 3.6,-2.4 1.9,1.9 .5,2.5 -.5,3.2 2.5,9.7 2.6,3.5 2.3,1.4 .4,3 v 4.1 l 2.3,2.3 1.6,-2.3 6.9,1.6 2.1,-1.2 9,1.7 2.8,-3.3 1.8,-.6 1.2,1.8 1.6,4.1 .9,.1 z"></path>
+            <!--      <circle id="MontanaDot" cx="273" cy="63" r="2" fill="black"/>-->
+            <foreignObject x="235" y="73" width="80" height="40">
+              <div id="MontanaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="MontanaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Nebraska" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="NebraskaPath" class="ne"
+                  d="m 402.5,191.1 38,1.6 3.4,3.2 1.7,.2 2.1,2 1.8,-.1 1.8,-2 1.5,.6 1,-.7 .7,.5 .9,-.4 .7,.4 .9,-.4 1,.5 1.4,-.6 2,.6 .6,1.1 6.1,2.2 1.2,1.3 .9,2.6 1.8,.7 1.5,-.2 .5,.9 v 2.3 l .6,1.7 v 1.4 l 1.3,3.7 2.2,4.3 .2,3.7 2.8,5 .4,6.1 1.3,.7 -.2,2.9 .8,3.3 -.7,2.2 1.8,4.4 1.3,1.3 -.3,1.4 2.1,3.7 3.9,6.3 h -32.4 l -43.7,-1.2 -36,-2 1.4,-22.1 -33.1,-2.4 3.7,-44.2 z"></path>
+            <!--      <circle id="NebraskaDot" cx="417" cy="204" r="2" fill="black"/>-->
+            <foreignObject x="380" y="210" width="80" height="40">
+              <div id="NebraskaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="NebraskaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <text id="NebraskaText" x="380" y="214" width="80" height="40"></text>
+          </g>
+
+          <g id="Nevada" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="NevadaPath" class="nv"
+                  d="m 167.6,296.8 -3.4,17.5 -2.4,2.9 h -2 l -1.2,-2.7 -3.7,-1.4 -3.5,.6 -1,13.6 .5,4.9 -.5,2.9 -1.4,3 -70.4,-105 -1.1,-3.5 16.4,-63.1 47,11.2 24.4,5.4 23.3,4.7 z"></path>
+            <!--      <circle id="NevadaDot" cx="137" cy="195" r="2" fill="black"/>-->
+            <foreignObject x="95" y="205" width="80" height="40">
+              <div id="NevadaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="NevadaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="New Hampshire" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="New HampshirePath" class="nh"
+                  d="m 862.6,93.6 -1.3,.1 -1,-1.1 -1.9,1.4 -.5,6.1 1.2,2.3 -1.1,3.5 2.1,2.8 -.4,1.7 .1,1.3 -1.1,2.1 -1.4,.4 -.6,1.3 -2.1,1 -.7,1.5 1.4,3.4 -.5,2.5 .5,1.5 -1,1.9 .4,1.9 -1.3,1.9 .2,2.2 -.7,1.1 .7,4.5 .7,1.5 -.5,2.6 .9,1.8 -.2,2.5 -.5,1.3 -.1,1.4 2.1,2.6 18.4,-3.8 1,-1.5 .3,-1.7 1.9,-.6 .5,-1.1 1.7,-1.1 1.3,.3 .8,-4.8 -2.3,-1.4 -.8,-2.2 -3.2,-2 -.6,-4 -11.9,-36.8 z"></path>
+            <!--      <circle id="New HampshireDot" cx="863" cy="131" r="2" fill="black"/>-->
+            <line x1="863" y1="131" x2="925" y2="123" stroke="black"/>
+            <line x1="925" y1="123" x2="1050" y2="123" stroke="black"/>
+            <foreignObject x="930" y="105" width="250" height="20">
+              <div id="New HampshireText" class="text-decoration"
+                   xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="New HampshireTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="New Jersey" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="New JerseyPath" class="nj"
+                  d="m 842.5,195.4 -14.6,-4.9 -1.8,2.5 .1,2.2 -3,5.4 1.5,1.8 -.7,2 -1,1 .5,3.6 2.7,.9 1,2.8 2.1,1.1 4.2,3.2 -3.3,2.6 -1.6,2.3 -1.8,3 -1.6,.6 -1.4,1.7 -1,2.2 -.3,2.1 .8,.9 .4,2.3 1.2,.6 2.4,1.5 1.8,.8 1.6,.8 .1,1.1 .8,.1 1.1,-1.2 .8,.4 2.1,.2 -.2,2.9 .2,2.5 1.8,-.7 1.5,-3.9 1.6,-4.8 2.9,-2.8 .6,-3.5 -.6,-1.2 1.7,-2.9 v -1.2 l -.7,-1.1 1.2,-2.7 -.3,-3.6 -.6,-8.2 -1.2,-1.4 v 1.4 l .5,.6 h -1.1 l -.6,-.4 -1.3,-.2 -.9,.6 -1.2,-1.6 .7,-1.7 v -1 l 1.7,-.7 .8,-2.1 z"></path>
+            <!--      <circle id="New JerseyDot" cx="833" cy="226" r="2" fill="black"/>-->
+            <line x1="833" y1="226" x2="867" y2="260" stroke="black"/>
+            <line x1="867" y1="260" x2="1000" y2="260" stroke="black"/>
+            <foreignObject x="870" y="242" width="250" height="15">
+              <div id="New JerseyText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="New JerseyTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="New Mexico" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="New MexicoPath" class="nm"
+                  d="m 357.5,332.9 h -.8 l -7.9,99.3 -31.8,-2.6 -34.4,-3.6 -.3,3 2,2.2 -30.8,-4.1 -1.4,10.2 -15.7,-2.2 17.4,-124.1 52.6,6.5 51.7,4.8 z"></path>
+            <!--      <circle id="New MexicoDot" cx="298" cy="333" r="2" fill="black"/>-->
+            <foreignObject x="260" y="343" width="80" height="40">
+              <div id="New MexicoText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="New MexicoTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="New York" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="New YorkPath" class="ny"
+                  d="m 872.9,181.6 -1.3,.1 -.5,1 z m -30.6,22.7 .7,.6 1.3,-.3 1.1,.3 .9,-1.3 h 1.9 l 2.4,-.9 5.1,-2.1 -.5,-.5 -1.9,.8 -2,.9 .2,-.8 2.6,-1.1 .8,-1 1.2,.1 4.1,-2.3 v .7 l -4.2,3 4.5,-2.8 1.7,-2.2 1.5,-.1 4.5,-3.1 3.2,-3.1 3,-2.3 1,-1.2 -1.7,-.1 -1,1.2 -.2,.7 -.9,.7 -.8,-1.1 -1.7,1 -.1,.9 -.9,-.2 .5,-.9 -1.2,-.7 -.6,.9 .9,.3 .2,.5 -.3,.5 -1.4,2.6 h -1.9 l .9,-1.8 .9,-.6 .3,-1.7 1.4,-1.6 .9,-.8 1.5,-.7 -1.2,-.2 -.7,.9 h -.7 l -1.1,.8 -.2,1 -2.2,2.1 -.4,.9 -1.4,.9 -7.7,1.9 .2,.9 -.9,.7 -2,.3 -1,-.6 -.2,1.1 -1.1,-.4 .1,1 -1.2,-.1 -1.2,.5 -.2,1.1 h -1 l .2,1 h -.7 l .2,1 -1.8,.4 -1.5,2.3 z m -.8,-.4 -1.6,.4 v 1 l -.7,1.6 .6,.7 2.4,-2.3 -.1,-.9 z m -10.1,-95.2 -.6,1.9 1.4,.9 -.4,1.5 .5,3.2 2.2,2.3 -.4,2.2 .6,2 -.4,1 -.3,3.8 3.1,6.7 -.8,1.8 .9,2.2 .9,-1.6 1.9,1.5 3,14.2 -.5,2 1.1,1 -.5,15 .7,1 2.8,16.3 1.8,1.5 -3.5,3.4 1.7,2.2 -1.3,3.3 -1.5,1.7 -1.5,2.3 -.2,-.7 .4,-5.9 -14.6,-4.9 -1.6,-1.1 -1.9,.3 -3,-2.2 -3,-5.8 h -2 l -.4,-1.5 -1.7,-1.1 -70.5,13.9 -.8,-6 4.3,-3.9 .6,-1.7 3.9,-2.5 .6,-2.4 2.3,-2 .8,-1.1 -1.7,-3.3 -1.7,-.5 -1.8,-3 -.2,-3.2 7.6,-3.9 8.2,-1.6 h 4.4 l 3.2,1.6 .9,-.1 1.8,-1.6 3.4,-.7 h 3 l 2.6,-1.3 2.5,-2.6 2.4,-3.1 1.9,-.4 1.1,-.5 .4,-3.2 -1.4,-2.7 -1.2,-.7 2,-1.3 -.1,-1.8 h -1.5 l -2.3,-1.4 -.1,-3.1 6.2,-6.1 .7,-2.4 3.7,-6.3 5.9,-6.4 2.1,-1.7 2.5,.1 20.6,-5.2 z"></path>
+            <!--      <circle id="New YorkDot" cx="811" cy="153" r="2" fill="black"/>-->
+            <line x1="811" y1="153" x2="780" y2="145" stroke="black"/>
+            <line x1="780" y1="145" x2="720" y2="145" stroke="black"/>
+            <foreignObject x="720" y="130" width="80" height="40">
+              <div id="New YorkText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="New YorkTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="North Carolina" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="North CarolinaPath" class="nc"
+                  d="m 829,300.1 -29.1,6.1 -39.4,7.3 -29.4,3.5 v 5.2 l -1.5,-.1 -1.4,1.2 -2.4,5.2 -2.6,-1.1 -3.5,2.5 -.7,2.1 -1.5,1.2 -.8,-.8 -.1,-1.5 -.8,-.2 -4,3.3 -.6,3.4 -4.7,2.4 -.5,1.2 -3.2,2.6 -3.6,.5 -4.6,3 -.8,4.1 -1.3,.9 -1.5,-.1 -1.4,1.3 -.1,4.9 21.4,-3 4.4,-1.9 1.3,-.1 7.3,-4.3 23.2,-2.2 .4,.5 -.2,1.4 .7,.3 1.2,-1.5 3.3,3 .1,2.6 19.7,-2.8 24.5,17.1 4,-2.2 3,-.7 h 1.7 l 1.1,1.1 .8,-2 .6,-5 1.7,-3.9 5.4,-6.1 4.1,-3.5 5.4,-2.3 2.5,-.4 1.3,.4 .7,1.1 3.3,-6.6 3.3,-5.3 -.7,-.3 -4.4,6.8 -.5,-.8 2,-2.2 -.4,-1.5 -2,-.5 1,1.3 -1.2,.1 -1.2,-1.8 -1.2,2 -1.6,.2 1,-2.7 .7,-1.7 -.2,-2.9 -2.2,-.1 .9,-.9 1.1,.3 2.7,.1 .8,-.5 h 2.3 l 2,-1.9 .2,-3.2 1.3,-1.4 1.2,-.2 1.3,-1 -.5,-3.7 -2.2,-3.8 -2.7,-.2 -.9,1.6 -.5,-1 -2.7,.2 -1.2,.4 -1.9,1.2 -.3,-.4 h -.9 l -1.8,1.2 -2.6,.5 v -1.3 l .8,-1 1,.7 h 1 l 1.7,-2.1 3.7,-1.7 2,-2.2 h 2.4 l .8,1.3 1.7,.8 -.5,-1.5 -.3,-1.6 -2.8,-3.1 -.3,-1.4 -.4,1 -.9,-1.3 z m 7,31 2.7,-2.5 4.6,-3.3 v -3.7 l -.4,-3.1 -1.7,-4.2 1.5,1.4 1,3.2 .4,7.6 -1.7,.4 -3.1,2.4 -3.2,3.2 z m 1.9,-19.3 -.9,-.2 v 1 l 2.5,2.2 -.2,-1.4 z m 2.9,2.1 -1.4,-2.8 -2.2,-3.4 -2.4,-3 -2.2,-4.3 -.8,-.7 2.2,4.3 .3,1.3 3.4,5.5 1.8,2.1 z"></path>
+            <!--      <circle id="North CarolinaDot" cx="778" cy="317" r="2" fill="black"/>-->
+            <foreignObject x="738" y="315" width="80" height="40">
+              <div id="North CarolinaText"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="North CarolinaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="North Dakota" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="North DakotaPath" class="nd"
+                  d="m 464.7,68.6 -1.1,2.8 .8,1.4 -.3,5.1 -.5,1.1 2.7,9.1 1.3,2.5 .7,14 1,2.7 -.4,5.8 2.9,7.4 .3,5.8 -.1,2.1 -29.5,-.4 -46,-2.1 -39.2,-2.9 5.2,-66.7 44.5,3.4 55.3,1.6 z"></path>
+            <!--      <circle id="North DakotaDot" cx="411" cy="71" r="2" fill="black"/>-->
+            <foreignObject x="375" y="81" width="80" height="40">
+              <div id="North DakotaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="North DakotaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Ohio" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="OhioPath" class="oh"
+                  d="m 685.7,208.8 1.9,-.4 3,1.3 2.1,.6 .7,.9 h 1 l 1,-1.5 1.3,.8 h 1.5 l -.1,1 -3.1,.5 -2,1.1 1.9,.8 1.6,-1.5 2.4,-.4 2.2,1.5 1.5,-.1 2.5,-1.7 3.6,-2.1 5.2,-.3 4.9,-5.9 3.8,-3.1 9.3,-5.1 4.9,29.9 -2.2,1.2 1.4,2.1 -.1,2.2 .6,2 -1.1,3.4 -.1,5.4 -1,3.6 .5,1.1 -.4,2.2 -1.1,.5 -2,3.3 -1.8,2 h -.6 l -1.8,1.7 -1.3,-1.2 -1.5,1.8 -.3,1.2 h -1.3 l -1.3,2.2 .1,2.1 -1,.5 1.4,1.1 v 1.9 l -1,.2 -.7,.8 -1,.5 -.6,-2.1 -1.6,-.5 -1,2.3 -.3,2.2 -1.1,1.3 1.3,3.6 -1.5,.8 -.4,3.5 h -1.5 l -3.2,1.4 -1.2,-2.1 -3.5,-1.4 -.8,-2.9 -.5,-.8 -3.4,1.8 -.6,1.7 h -.9 l -1.3,.7 -1.2,-.8 -3,-.8 -1.9,.8 v 1 l -2.2,-.2 -1.9,-2.1 -2.3,.2 -4.1,-.7 v -1 l -2.2,-3.4 -2.9,-1.2 -1.9,.8 -2.2,-.1 -1.3,-.5 -6.6,-57.2 21.4,-3.5 z"></path>
+            <!--      <circle id="OhioDot" cx="697" cy="236" r="2" fill="black"/>-->
+            <foreignObject x="660" y="216" width="80" height="40">
+              <div id="OhioText"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="OhioTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Oklahoma" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="OklahomaPath" class="ok"
+                  d="m 501.5,398.6 -4.6,-3.8 -2.2,-.9 -.5,1.6 -5.1,.3 -.6,-1.5 -5,2.5 -1.6,-.7 -3.7,.3 -.6,1.7 -3.6,.9 -1.3,-1.2 -1.2,.1 -2,-1.8 -2.1,.7 -2,-.5 -1.8,-2 -2.5,4.2 -1.2,.8 -1,-1.8 .3,-2 -1.2,-.7 -2.3,2.5 -1.7,-1.2 -.1,-1.5 -1.3,.5 -2.6,-1.7 -3,2.6 -2.3,-1.1 .7,-2.1 -2.3,.1 -1.9,-3 -3.5,-1.1 -2,2.3 -2.3,-2.2 -1.4,.4 -2,.1 -3.5,-1.9 -2.3,.1 -1.2,-.7 -.5,-2.9 -2.3,-1.7 -1.1,1.5 -1.4,-1 -1.2,-.4 -1.1,1 -1.5,-.3 -2.5,-3 -2.7,-1.3 1.4,-42.7 -52.6,-3.2 .6,-10.6 16.5,1 67.7,2.9 62,.1 .2,10.8 4.1,24.4 -.7,39 z"></path>
+            <!--      <circle id="OklahomaDot" cx="454" cy="334" r="2" fill="black"/>-->
+            <foreignObject x="424" y="344" width="80" height="40">
+              <div id="OklahomaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="OklahomaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Oregon" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="OregonPath" class="or"
+                  d="m 93.9,166.5 47,11.2 8.5,-37.3 2.9,-5.8 .4,-2.1 .8,-.9 -.9,-2 -2.9,-1.2 .2,-4.2 4,-5.8 2.5,-.8 1.6,-2.3 -.1,-1.6 1.8,-1.6 3.2,-5.5 4.2,-4.8 -.5,-3.2 -3.5,-3.1 -1.6,-3.6 -30.3,-7.3 -2.8,1 -5.4,-.9 -1.8,-.9 -1.5,1.2 -3.3,-.4 -4.5,.5 -.9,.7 -4.2,-.4 -.8,-1.6 -1.2,-.2 -4.4,1.3 -1.6,-1.1 -2.2,.8 -.2,-1.8 -2.3,-1.2 -1.5,-.2 -1,-1.1 -3,.3 -1.2,-.8 h -1.2 l -1.2,.9 -5.5,.7 -6.6,-4.2 1.1,-5.6 -.4,-4.1 -3.2,-3.7 -3.7,.1 -.4,-1.1 .4,-1.2 -.7,-.8 -1,.1 -1.1,1.3 -1.5,-.2 -.5,-1.1 -1,-.1 -.7,.6 -2,-1.9 v 4.3 l -1.3,1.3 -1.1,3.5 -.1,2.3 -4.5,12.3 -13.2,31.3 -3.2,4.6 -1.6,-.1 .1,2.1 -5.2,7.1 -.3,3.3 1,1.3 .1,2.4 -1.2,1.1 -1.2,3 .1,5.7 1.2,2.9 z"></path>
+            <!--      <circle id="OregonDot" cx="100" cy="94" r="2" fill="black"/>-->
+            <foreignObject x="60" y="104" width="80" height="40">
+              <div id="OregonText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="OregonTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Pennsylvania" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="PennsylvaniaPath" class="pa"
+                  d="m 826.3,189.4 -1.9,.3 -3,-2.2 -3,-5.8 h -2 l -.4,-1.5 -1.7,-1.1 -70.5,13.9 -.8,-6 -4.2,3.4 -.9,.1 -2.7,3 -3.3,1.7 4.9,29.9 3.2,19.7 17.4,-2.9 60.5,-11.8 1.2,-2.1 1.5,-1.1 1.6,-.3 1.6,.6 1.4,-1.7 1.6,-.6 1.8,-3 1.6,-2.3 3.3,-2.6 -4.2,-3.2 -2.1,-1.1 -1,-2.8 -2.7,-.9 -.5,-3.6 1,-1 .7,-2 -1.5,-1.8 3,-5.4 -.1,-2.2 1.8,-2.5 z"></path>
+            <!--      <circle id="PennsylvaniaDot" cx="778" cy="192" r="2" fill="black"/>-->
+            <foreignObject x="740" y="195" width="80" height="40">
+              <div id="PennsylvaniaText"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="PennsylvaniaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Rhode Island" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="Rhode IslandPath" class="ri"
+                  d="m 883.2,170.7 -1.3,-1.1 -2.6,-1.3 -.6,-2.2 h -.8 l -.7,-2.6 -6.5,2 3.2,12.3 -.4,1.1 .4,1.8 5.6,-3.6 .1,-3 -.8,-.8 .4,-.6 -.1,-1.3 -.9,-.7 1.2,-.4 -.9,-1.6 1.8,.7 .3,1.4 .7,1.2 -1.4,-.8 1.1,1.7 -.3,1.2 -.6,-1.1 v 2.5 l .6,-.9 .4,.9 1.3,-1.5 -.2,-2.5 1.4,3.1 1,-.9 z m -4.7,12.2 h .9 l .5,-.6 -.8,-1.3 -.7,.7 z"></path>
+            <!--      <circle id="Rhode IslandDot" cx="875" cy="171" r="2" fill="black"/>-->
+            <line x1="875" y1="171" x2="901" y2="199" stroke="black"/>
+            <line x1="901" y1="199" x2="1015" y2="199" stroke="black"/>
+            <foreignObject x="900" y="179" width="250" height="20">
+              <div id="Rhode IslandText" class="text-decoration"
+                   xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="Rhode IslandTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="South Carolina" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="South CarolinaPath" class="sc"
+                  d="m 772.3,350.2 -19.7,2.8 -.1,-2.6 -3.3,-3 -1.2,1.5 -.7,-.3 .2,-1.4 -.4,-.5 -23.2,2.2 -7.3,4.3 -1.3,.1 -4.4,1.9 -.1,1.9 -1.9,1 -1.4,3.2 .2,1.3 6.1,3.8 2.6,-.3 3.1,4 .4,1.7 4.2,5.1 2.6,1.7 1.4,.2 2.2,1.6 1.1,2.2 2,1.6 1.8,.5 2.7,2.7 .1,1.4 2.6,2.8 5,2.3 3.6,6.7 .3,2.7 3.9,2.1 2.5,4.8 .8,3.1 4.2,.4 .8,-1.5 h .6 l 1.8,-1.5 .5,-2 3.2,-2.1 .3,-2.4 -1.2,-.9 .8,-.7 .8,.4 1.3,-.4 1.8,-2.1 3.8,-1.8 1.6,-2.4 .1,-.7 4.8,-4.4 -.1,-.5 -.9,-.8 1.1,-1.5 h .8 l .4,.5 .7,-.8 h 1.3 l .6,-1.5 2.3,-2.1 -.3,-5.4 .8,-2.3 3.6,-6.2 2.4,-2.2 2.2,-1.1 z"></path>
+            <!--      <circle id="South CarolinaDot" cx="757" cy="372" r="2" fill="black"/>-->
+            <line x1="757" y1="372" x2="782" y2="441" stroke="black"/>
+            <line x1="782" y1="441" x2="860" y2="441" stroke="black"/>
+            <foreignObject x="785" y="423" width="250" height="15">
+              <div id="South CarolinaText" class="text-decoration"
+                   xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="South CarolinaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="South Dakota" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="South DakotaPath" class="sd"
+                  d="m 396.5,125.9 46,2.1 29.5,.4 -.1,2.2 -.9,2 -3.1,1.9 -.3,1.2 1.7,2.5 .4,1.8 2.6,.6 1.5,1.9 -.2,39.5 -2.2,-.1 -.1,1.6 1.3,1.5 -.1,1.1 -1,.5 .4,1.6 1.3,.4 .7,2 -1.7,5.1 -1,4.3 1.3,1.2 .3,1.3 .7,1.7 -1.5,.2 -1.8,-.7 -.9,-2.6 -1.2,-1.3 -6.1,-2.2 -.6,-1.1 -2,-.6 -1.4,.6 -1,-.5 -.9,.4 -.7,-.4 -.9,.4 -.7,-.5 -1,.7 -1.5,-.6 -1.8,2 -1.8,.1 -2.1,-2 -1.7,-.2 -3.4,-3.2 -38,-1.6 -51.1,-3.5 3.9,-43.9 2,-20.7 z"></path>
+            <!--      <circle id="South DakotaDot" cx="413" cy="134" r="2" fill="black"/>-->
+            <foreignObject x="375" y="144" width="80" height="40">
+              <div id="South DakotaText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="South DakotaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Tennessee" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="TennesseePath" class="tn"
+                  d="m 620.9,365.1 45.7,-4 22.9,-2.9 .1,-4.9 1.4,-1.3 1.5,.1 1.3,-.9 .8,-4.1 4.6,-3 3.6,-.5 3.2,-2.6 .5,-1.2 4.7,-2.4 .6,-3.4 4,-3.3 .8,.2 .1,1.5 .8,.8 1.5,-1.2 .7,-2.1 3.5,-2.5 2.6,1.1 2.4,-5.2 1.4,-1.2 1.5,.1 0,-5.2 .3,-.7 -4.6,.5 -.2,1 -28.9,3.3 -5.6,1.4 -20.5,1.4 -5.2,.8 -17.4,1 -2.6,.8 -22.6,2 -.7,-.6 h -3.7 l 1.2,3.2 -.6,.9 -23.3,1.5 -.8,1 -.8,-.7 h -1 v 1.3 l .6,1 -.1,1 -1.4,.5 1.4,1.5 -.8,.7 -1.7,-.2 .6,1 1.2,1.1 v .7 l -1.2,.5 -1,2 .1,.6 1.4,1 -.4,.7 h -1.5 v .5 l .9,.9 .1,.8 -1.4,.2 -.5,.8 -1.6,.2 -.9,.9 .6,.9 1.1,-.1 .5,.9 -1.6,1.3 .4,1.5 -2,-.6 -.1,.7 .4,1.1 -.3,1.4 -1.3,-.8 -.8,.8 1.1,.1 .1,1.5 -.6,1 1.1,.9 -.3,1.5 .8,.7 -.7,1 -1.2,-.5 -.9,2.2 -1.6,.7 z"></path>
+            <!--      <circle id="TennesseeDot" cx="647" cy="332" r="2" fill="black"/>-->
+            <foreignObject visibility="hidden" x="610" y="332" width="80" height="40">
+              <div id="TennesseeText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="TennesseeTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Texas" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="TexasPath" class="tx"
+                  d="m 282.3,429 .3,-3 34.4,3.6 31.8,2.6 7.9,-99.3 .8,0 52.6,3.2 -1.4,42.7 2.7,1.3 2.5,3 1.5,.3 1.1,-1 1.2,.4 1.4,1 1.1,-1.5 2.3,1.7 .5,2.9 1.2,.7 2.3,-.1 3.5,1.9 2,-.1 1.4,-.4 2.3,2.2 2,-2.3 3.5,1.1 1.9,3 2.3,-.1 -.7,2.1 2.3,1.1 3,-2.6 2.6,1.7 1.3,-.5 .1,1.5 1.7,1.2 2.3,-2.5 1.2,.7 -.3,2 1,1.8 1.2,-.8 2.5,-4.2 1.8,2 2,.5 2.1,-.7 2,1.8 1.2,-.1 1.3,1.2 3.6,-.9 .6,-1.7 3.7,-.3 1.6,.7 5,-2.5 .6,1.5 5.1,-.3 .5,-1.6 2.2,.9 4.6,3.8 6.4,1.9 2.6,2.3 2.8,-1.3 3.2,.8 .2,11.9 .5,19.9 .7,3.4 2.6,2.8 .7,5.4 3.8,4.6 .8,4.3 h 1 l -.1,7.3 -3.3,6.4 1.3,2.3 -1.3,1.5 .7,3 -.1,4.3 -2.2,3.5 -.1,.8 -1.7,1.2 1,1.8 1.2,1.1 -3.5,.3 -8.4,3.9 -3.5,1.4 -1.8,1.8 -.7,-.5 2.1,-2.3 1.8,-.7 .5,-.9 -2.9,-.1 -.7,-.8 .8,-2 -.9,-1.8 h -.6 l -2.4,1.3 -1.9,2.6 .3,1.7 3.3,3.4 1.3,.3 v .8 l -2.3,1.6 -4.9,4 -4,3.9 -3.2,1.4 -5,3 -3.7,2 -4.5,1.9 -4.1,2.5 3.2,-3 v -1.1 l .6,-.8 -.2,-1.8 -1.5,-.1 -1.1,1.5 -2.6,1.3 -1.8,-1.2 -.3,-1.7 h -1.5 l .8,2.2 1.4,.7 1.2,.9 1.8,1.6 -.7,.8 -3.9,1.7 -1.7,.1 -1.2,-1.2 -.5,2.1 .5,1.1 -2.7,2 -1.5,.2 -.8,.7 -.4,1.7 -1.8,3.3 -1.6,.7 -1.6,-.6 -1.8,1.1 .3,1.4 1.3,.8 1,.8 -1.8,3.5 -.3,2.8 -1,1.7 -1.4,1 -2.9,.4 1.8,.6 1.9,-.6 -.4,3.2 -1.1,-.1 .2,1.2 .3,1.4 -1.3,.9 v 3.1 l 1.6,1.4 .6,3.1 -.4,2.2 -1,.4 .4,1.5 1.1,.4 .8,1.7 v 2.6 l 1.1,2.1 2.2,2.6 -.1,.7 -2.2,-.2 -1.6,1.4 .2,1.4 -.9,-.3 -1.4,-.2 -3.4,-3.7 -2.3,-.6 h -7.1 l -2.8,-.8 -3.6,-3 -1.7,-1 -2.1,.1 -3.2,-2.6 -5.4,-1.6 v -1.3 l -1.4,-1.8 -.9,-4.7 -1.1,-1.7 -1.7,-1.4 v -1.6 l -1.4,-.6 .6,-2.6 -.3,-2.2 -1.3,-1.4 .7,-3 -.8,-3.2 -1.7,-1.4 h -1.1 l -4,-3.5 .1,-1.9 -.8,-1.7 -.8,-.2 -.9,-2.4 -2,-1.6 -2.9,-2.5 -.2,-2.1 -1,-.7 .2,-1.6 .5,-.7 -1.4,-1.5 .1,-.7 -2,-2.2 .1,-2.1 -2.7,-4.9 -.1,-1.7 -1.8,-3.1 -5.1,-4.8 v -1.1 l -3.3,-1.7 -.1,-1.8 -1.2,-.4 v -.7 l -.8,-.2 -2.1,-2.8 h -.8 l -.7,-.6 -1.3,1.1 h -2.2 l -2.6,-1.1 h -4.6 l -4.2,-2.1 -1.3,1.9 -2.2,-.6 -3.3,1.2 -1.7,2.8 -2,3.2 -1.1,4.4 -1.4,1.2 -1.1,.1 -.9,1.6 -1.3,.6 -.1,1.8 -2.9,.1 -1.8,-1.5 h -1 l -2,-2.9 -3.6,-.5 -1.7,-2.3 -1.3,-.2 -2.1,-.8 -3.4,-3.4 .2,-.8 -1.6,-1.2 -1,-.1 -3.4,-3.1 -.1,-2 -2.3,-4 .2,-1.6 -.7,-1.3 .8,-1.5 -.1,-2.4 -2.6,-4.1 -.6,-4.2 -1.6,-1.6 v -1 l -1.2,-.2 -.7,-1.1 -2.4,-1.7 -.9,-.1 -1.9,-1.6 v -1.1 l -2.9,-1.8 -.6,-2.1 -2.6,-2.3 -3.2,-4.4 -3,-1.3 -2.1,-1.8 .2,-1.2 -1.3,-1.4 -1.7,-3.7 -2.4,-1 z m 174.9,138.3 .8,.1 -.6,-4.8 -3.5,-12.3 -.2,-8.1 4.9,-10.5 6.1,-8.2 7.2,-5.1 v -.7 h -.8 l -2.6,1 -3.6,2.3 -.7,1.5 -8.2,11.6 -2.8,7.9 v 8.8 l 3.6,12 z"></path>
+            <!--      <circle id="TexasDot" cx="421" cy="402" r="2" fill="black"/>-->
+            <foreignObject x="365" y="412" width="120" height="40">
+              <div id="TexasText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="TexasTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Utah" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="UtahPath" class="ut" d="m 233.2,217.9 3.3,-21.9 -47.9,-8.2 -21,109 46.2,8.2 40,6 11.5,-88.3 z"></path>
+            <!--      <circle id="UtahDot" cx="217" cy="224" r="2" fill="black"/>-->
+            <foreignObject x="180" y="234" width="80" height="40">
+              <div id="UtahText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="UtahTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Vermont" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="VermontPath" class="vt"
+                  d="m 859.1,102.4 -1.1,3.5 2.1,2.8 -.4,1.7 .1,1.3 -1.1,2.1 -1.4,.4 -.6,1.3 -2.1,1 -.7,1.5 1.4,3.4 -.5,2.5 .5,1.5 -1,1.9 .4,1.9 -1.3,1.9 .2,2.2 -.7,1.1 .7,4.5 .7,1.5 -.5,2.6 .9,1.8 -.2,2.5 -.5,1.3 -.1,1.4 2.1,2.6 -12.4,2.7 -1.1,-1 .5,-2 -3,-14.2 -1.9,-1.5 -.9,1.6 -.9,-2.2 .8,-1.8 -3.1,-6.7 .3,-3.8 .4,-1 -.6,-2 .4,-2.2 -2.2,-2.3 -.5,-3.2 .4,-1.5 -1.4,-.9 .6,-1.9 -.8,-1.7 27.3,-6.9 z"></path>
+            <!--      <circle id="VermontDot" cx="843" cy="116" r="2" fill="black"/>-->
+            <line x1="843" y1="116" x2="840" y2="103" stroke="black"/>
+            <line x1="840" y1="103" x2="710" y2="103" stroke="black"/>
+            <foreignObject x="710" y="85" width="130" height="40">
+              <div id="VermontText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="VermontTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Virginia" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="VirginiaPath" class="va"
+                  d="m 834.7,265.4 -1.1,2.8 .5,1.1 .4,-1.1 .8,-3.1 z m -34.6,-7 -.7,-1 1,-.1 1,-.9 .4,-1.8 -.2,-.5 .1,-.5 -.3,-.7 -.6,-.5 -.4,-.1 -.5,-.4 -.6,-.6 h -1 l -.6,-.1 -.4,-.4 .1,-.5 -1.7,-.6 -.8,.3 -1.2,-.1 -.7,-.7 -.5,-.2 -.2,-.7 .6,-.8 v -.9 l -1.2,-.2 -1,-.9 -.9,.1 -1.6,-.3 -.4,.7 -.4,1.6 -.5,2.3 -10,-5.2 -.2,.9 .9,1.6 -.8,2.3 .1,2.9 -1.2,.8 -.5,2.1 -.9,.8 -1.4,1.8 -.9,.8 -1,2.5 -2.4,-1.1 -2.3,8.5 -1.3,1.6 -2.8,-.5 -1.3,-1.9 -2.3,-.7 -.1,4.7 -1.4,1.7 .4,1.5 -2.1,2.2 .4,1.9 -3.7,6.3 -1,3.3 1.5,1.2 -1.5,1.9 .1,1.4 -2.3,2 -.7,-1.1 -4.3,3.1 -1.5,-1 -.6,1.4 .8,.5 -.5,.9 -5.5,2.4 -3,-1.8 -.8,1.7 -1.9,1.8 -2.3,.1 -4.4,-2.3 -.1,-1.5 -1.5,-.7 .8,-1.2 -.7,-.6 -4.9,6.6 -2.9,1 -3,3 -.4,2.2 -2.1,1.3 -.1,1.7 -1.4,1.4 -1.8,.5 -.5,1.9 -1,.4 -6.9,4.2 28.9,-3.3 .2,-1 4.6,-.5 -.3,.7 29.4,-3.5 39.4,-7.3 29.1,-6.1 -.6,-1.2 .4,-.1 .9,.9 -.1,-1.4 -.3,-1.9 1.6,1.2 .9,2.1 v -1.3 l -3.4,-5.5 v -1.2 l -.7,-.8 -1.3,.7 .5,1.4 h -.8 l -.4,-1 -.6,.9 -.9,-1.1 -2.1,-.1 -.2,.7 1.5,2.1 -1.4,-.7 -.5,-1 -.4,.8 -.8,.1 -1.5,1.7 .3,-1.6 v -1.4 l -1.5,-.7 -1.8,-.5 -.2,-1.7 -.6,-1.3 -.6,1.1 -1.7,-1 -2,.3 .2,-.9 1.5,-.2 .9,.5 1.7,-.8 .9,.4 .5,1 v .7 l 1.9,.4 .3,.9 .9,.4 .9,1.2 1.4,-1.6 h .6 l -.1,-2.1 -1.3,1 -.6,-.9 1.5,-.2 -1.2,-.9 -1.2,.6 -.1,-1.7 -1.7,.2 -2.2,-1.1 -1.8,-2.2 3.6,2.2 .9,.3 1.7,-.8 -1.7,-.9 .6,-.6 -1,-.5 .8,-.2 -.3,-.9 1.1,.9 .4,-.8 .4,1.3 1.2,.8 .6,-.5 -.5,-.6 -.1,-2.5 -1.1,-.1 -1.6,-.8 .9,-1.1 -2,-.1 -.4,-.5 -1.4,.6 -1.4,-.8 -.5,-1.2 -2.1,-1.2 -2.1,-1.8 -2.2,-1.9 3,1.3 .9,1.2 2.1,.7 2.3,2.5 .2,-1.7 .6,1.3 2.3,.5 v -4 l -.8,-1.1 1.1,.4 .1,-1.6 -3.1,-1.4 -1.6,-.2 -1.3,-.2 .3,-1.2 -1.5,-.3 -.1,-.6 h -1.8 l -.2,.8 -.7,-1 h -2.7 l -1,-.4 -.2,-1 -1.2,-.6 -.4,-1.5 -.6,-.4 -.7,1.1 -.9,.2 -.9,.7 h -1.5 l -.9,-1.3 .4,-3.1 .5,-2.4 .6,.5 z m 21.9,11.6 .9,-.1 0,-.6 -.8,.1 z m 7.5,14.2 -1,2.7 1.2,-1.3 z m -1.8,-15.3 .7,.3 -.2,1.9 -.5,-.5 -1.3,1 1,.4 -1.8,4.4 .1,8.1 1.9,3.1 .5,-1.5 .4,-2.7 -.3,-2.3 .7,-.9 -.2,-1.4 1.2,-.6 -.6,-.5 .5,-.7 .8,1.1 -.2,1.1 -.4,3.9 1.1,-2.2 .4,-3.1 .1,-3 -.3,-2 .6,-2.3 1.1,-1.8 .1,-2.2 .3,-.9 -4.6,1.6 -.7,.8 z"></path>
+            <!--      <circle id="VirginiaDot" cx="783" cy="263" r="2" fill="black"/>-->
+            <foreignObject x="743" y="273" width="80" height="40">
+              <div id="VirginiaText"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject >
+              <div id="VirginiaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Washington" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="WashingtonPath" class="wa"
+                  d="m 161.9,83.6 .7,4 -1.1,4.3 -30.3,-7.3 -2.8,1 -5.4,-.9 -1.8,-.9 -1.5,1.2 -3.3,-.4 -4.5,.5 -.9,.7 -4.2,-.4 -.8,-1.6 -1.2,-.2 -4.4,1.3 -1.6,-1.1 -2.2,.8 -.2,-1.8 -2.3,-1.2 -1.5,-.2 -1,-1.1 -3,.3 -1.2,-.8 h -1.2 l -1.2,.9 -5.5,.7 -6.6,-4.2 1.1,-5.6 -.4,-4.1 -3.2,-3.7 -3.7,.1 -.4,-1.1 .4,-1.2 -.7,-.8 -1,.1 -2.1,-1.5 -1.2,.4 -2,-.1 -.7,-1.5 -1.6,-.3 2.5,-7.5 -.7,6 .5,.5 v -2 l .8,-.2 1.1,2.3 -.5,-2.2 1.2,-4.2 1.8,.4 -1.1,-2 -1,.3 -1.5,-.4 .2,-4.2 .2,1.5 .9,.5 .6,-1.6 h 3.2 l -2.2,-1.2 -1.7,-1.9 -1.4,1.6 1.2,-3.1 -.3,-4.6 -.2,-3.6 .9,-6.1 -.5,-2 -1.4,-2.1 .1,-4 .4,-2.7 2,-2.3 -.7,-1.4 .2,-.6 .9,.1 7.8,7.6 4.7,1.9 5.1,2.5 3.2,-.1 .2,3 1,-1.6 h .7 l .6,2.7 .5,-2.6 1.4,-.2 .5,.7 -1.1,.6 .1,1.6 .7,-1.5 h 1.1 l -.4,2.6 -1.1,-.8 .4,1.4 -.1,1.5 -.8,.7 -2.5,2.9 1.2,-3.4 -1.6,.4 -.4,2.1 -3.8,2.8 -.4,1 -2.1,2.2 -.1,1 h 2.2 l 2.4,-.2 .5,-.9 -3.9,.5 v -.6 l 2.6,-2.8 1.8,-.8 1.9,-.2 1,-1.6 3,-2.3 v -1.4 h 1.1 l .1,4 h -1.5 l -.6,.8 -1.1,-.9 .3,1.1 v 1.7 l -.7,.7 -.3,-1.6 -.8,.8 .7,.6 -.9,1.1 h 1.3 l .7,-.5 .1,2 -1,1.9 -.9,1 -.1,1.8 -1,-.2 -.2,-1.4 .9,-1.1 -.8,-.5 -.8,.7 -.7,2.2 -.8,.9 -.1,-2 .8,-1.1 -.2,-1.1 -1.2,1.2 .1,2.2 -.6,.4 -2.1,-.4 -1.3,1.2 2.2,-.6 -.2,2.2 1,-1.8 .4,1.4 .5,-1 .7,1.8 h .7 l .7,-.8 .6,-.1 2,-1.9 .2,-1.2 .8,.6 .3,.9 .7,-.3 .1,-1.2 h 1.3 l .2,-2.9 -.1,-2.7 .9,.3 -.7,-2.1 1.4,-.8 .2,-2.4 2.3,-2.2 1,.1 .3,-1.4 -1.2,-1.4 -.1,-3.5 -.8,.9 .7,2.9 -.6,.1 -.6,-1.9 -.6,-.5 .3,-2.3 1.8,-.1 .3,.7 .3,-1.6 -1.6,-1.7 -.6,-1.6 -.2,2 .9,1.1 -.7,.4 -1,-.8 -1.8,1.3 1.5,.5 .2,2.4 -.3,1.8 .9,-1.3 1.4,2.3 -.4,1.9 h -1.5 v -1.2 l -1.5,-1.2 .5,-3 -1.9,-2.6 2.7,-3 .6,-4.1 h .9 l 1.4,3.2 v -2.6 l 1.2,.3 v -3.3 l -.9,-.8 -1.2,2.5 -1,-3 1.3,-.1 -1.5,-4.9 1.9,-.6 25.4,7.5 31.7,8 23.6,5.5 z m -78.7,-39.4 h .5 l .1,.8 -.5,.3 .1,.6 -.7,.4 -.2,-.9 .5,-.4 z m 5,-4.3 -1.2,1.9 -.1,.8 .4,.2 .5,-.6 1.1,.1 z m -.4,-21.6 .5,.6 1.3,-.3 .2,-1 1.2,-1.8 -1,-.4 -.7,1.6 -.1,-1.6 -1.1,.2 -.7,1.4 z m 3.2,-5.5 .7,1.5 -.9,.2 -.8,.4 -.2,-2.4 z m -2.7,-1.6 -1.1,-.2 .5,1.4 z m -1,2.5 .8,.4 -.4,1.1 1.7,-.5 -.2,-2.2 -.9,-.2 z m -2.7,-.4 .3,2.7 1.6,1.3 .6,-1.9 -1.1,-2.2 z m 1.9,-1.1 -1.1,-1 -.9,.1 1.8,1.5 z m 3.2,-7 h -1.2 v .8 l 1.2,.6 z m -.9,32.5 .4,-2.7 h -1.1 l -.2,1.9 z"></path>
+            <!--      <circle id="WashingtonDot" cx="127" cy="24" r="2" fill="black"/>-->
+            <foreignObject x="85" y="30" width="80" height="40">
+              <div id="WashingtonText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="WashingtonTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="West Virginia" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="West VirginiaPath" class="wv"
+                  d="m 723.4,297.5 -.8,1.2 1.5,.7 .1,1.5 4.4,2.3 2.3,-.1 1.9,-1.8 .8,-1.7 3,1.8 5.5,-2.4 .5,-.9 -.8,-.5 .6,-1.4 1.5,1 4.3,-3.1 .7,1.1 2.3,-2 -.1,-1.4 1.5,-1.9 -1.5,-1.2 1,-3.3 3.7,-6.3 -.4,-1.9 2.1,-2.2 -.4,-1.5 1.4,-1.7 .1,-4.7 2.3,.7 1.3,1.9 2.8,.5 1.3,-1.6 2.3,-8.5 2.4,1.1 1,-2.5 .9,-.8 1.4,-1.8 .9,-.8 .5,-2.1 1.2,-.8 -.1,-2.9 .8,-2.3 -.9,-1.6 .2,-.9 10,5.2 .5,-2.3 .4,-1.6 .4,-.7 -.9,-.4 .2,-1.6 -1,-.5 -.2,-.7 h -.7 l -.8,-1.2 .2,-1 -2.6,.4 -2.2,-1.6 -1.4,.3 -.9,1.4 h -1.3 l -1.7,2.9 -3.3,.4 -1.9,-1 -2.6,3.8 -2.2,-.3 -3.1,3.9 -.9,1.6 -1.8,1.6 -1.7,-11.4 -17.4,2.9 -3.2,-19.7 -2.2,1.2 1.4,2.1 -.1,2.2 .6,2 -1.1,3.4 -.1,5.4 -1,3.6 .5,1.1 -.4,2.2 -1.1,.5 -2,3.3 -1.8,2 h -.6 l -1.8,1.7 -1.3,-1.2 -1.5,1.8 -.3,1.2 h -1.3 l -1.3,2.2 .1,2.1 -1,.5 1.4,1.1 v 1.9 l -1,.2 -.7,.8 -1,.5 -.6,-2.1 -1.6,-.5 -1,2.3 -.3,2.2 -1.1,1.3 1.3,3.6 -1.5,.8 -.4,3.5 h -1.5 l -3.2,1.4 -.1,1.1 .6,1 -.6,3.6 1.9,1.6 .8,1.1 1,.6 -.1,.9 4.4,5.6 h 1.4 l 1.5,1.8 1.2,.3 1.4,-.1 z"></path>
+            <!--      <circle id="West VirginiaDot" cx="734" cy="270" r="2" fill="black"/>-->
+            <line x1="734" y1="270" x2="664" y2="66" stroke="black"/>
+            <line x1="664" y1="66" x2="615" y2="66" stroke="black"/>
+            <foreignObject x="615" y="50" width="80" height="40">
+              <div id="West VirginiaText" class="text-decoration"  xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+
+            <foreignObject>
+              <div id="West VirginiaTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Wisconsin" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="WisconsinPath" class="wi"
+                  d="m 611,144 -2.9,.8 .2,2.3 -2.4,3.4 -.2,3.1 .6,.7 .8,-.7 .5,-1.6 2,-1.1 1.6,-4.2 3.5,-1.1 .8,-3.3 .7,-.9 .4,-2.1 1.8,-1.1 v -1.5 l 1,-.9 1.4,.1 v 2 l -1,.1 .5,1.2 -.7,2.2 -.6,.1 -1.2,4.5 -.7,.5 -2.8,7.2 -.3,4.2 .6,2 .1,1.3 -2.4,1.9 .3,1.9 -.9,3.1 .3,1.6 .4,3.7 -1.1,4.1 -1.5,5 1,1.5 -.3,.3 .8,1.7 -.5,1.1 1.1,.9 v 2.7 l 1.3,1.5 -.4,3 .3,4 -45.9,2.8 -1.3,-2.8 -3.3,-.7 -2.7,-1.5 -2,-5.5 .1,-2.5 1.6,-3.3 -.6,-1.1 -2.1,-1.6 -.2,-2.6 -1.1,-4.5 -.2,-3 -2.2,-3 -2.8,-.7 -5.2,-3.6 -.6,-3.3 -6.3,-3.1 -.2,-1.3 h -3.3 l -2.2,-2.6 -2,-1.3 .7,-5.1 -.9,-1.6 .5,-5.4 1,-1.8 -.3,-2.7 -1.2,-1.3 -1.8,-.3 v -1.7 l 2.8,-5.8 5.9,-3.9 -.4,-13 .9,.4 .6,-.5 .1,-1.1 .9,-.6 1.4,1.2 .7,-.1 h 2.6 l 6.8,-2.6 .3,-1 h 1.2 l .7,-1.2 .4,.8 1.8,-.9 1.8,-1.7 .3,.5 1,-1 2.2,1.6 -.8,1.6 -1.2,1.4 .5,1.5 -1.4,1.6 .4,.9 2.3,-1.1 v -1.4 l 3.3,1.9 1.9,.7 1.9,.7 3,3.8 17,3.8 1.4,1 4,.8 .7,.5 2.8,-.2 4.9,.8 1.4,1.5 -1,1 .8,.8 3.8,.7 1.2,1.2 .1,4.4 -1.3,2.8 2,.1 1,-.8 .9,.8 -1.1,3.1 1,1.6 1.2,.3 z m -49.5,-37.3 -.5,.1 -1.5,1.6 .2,.5 1.5,-.6 v -.6 l .9,-.3 z m 1.6,-1.1 -1,.3 -.2,.7 .9,-.1 z m -1.3,-1.6 -.2,.9 h 1.7 l .6,-.4 .1,-1 z m 2.8,-3 -.3,1.9 1.2,-.5 .1,-1.4 z m 58.3,31.9 -2,.3 -.4,1.3 1.3,1.7 z"></path>
+            <!--      <circle id="WisconsinDot" cx="572" cy="128" r="2" fill="black"/>-->
+            <foreignObject x="535" y="133" width="90" height="40">
+              <div id="WisconsinText"  xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+            <foreignObject>
+              <div id="WisconsinTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+          <g id="Wyoming" class="stateHover" onmousemove="showTooltip(evt)" onmouseout="hideTooltip()">
+            <path id="WyomingPath" class="wy"
+                  d="m 355.3,143.7 -51,-5.3 -57.3,-7.9 -2,10.7 -8.5,54.8 -3.3,21.9 32.1,4.8 44.9,5.7 37.5,3.4 3.7,-44.2 z"></path>
+            <!--      <circle id="WyomingDot" cx="296" cy="151" r="2" fill="black"/>-->
+            <foreignObject x="257" y="165" width="80" height="40">
+              <div id="WyomingText" xmlns="http://www.w3.org/1999/xhtml">
+              </div>
+            </foreignObject>
+            <foreignObject >
+              <div id="WyomingTooltip" class="tooltip" xmlns="http://www.w3.org/1999/xhtml">
+
+              </div>
+            </foreignObject>
+          </g>
+
+
+          <path id="District of Columbia" class="dc" d="m 803.5,252 -2.6,-1.8 -1,1.7 .5,.4 .4,.1 .6,.5 .3,.7 -.1,.5 .2,.5 z">
+            <title>District of Columbia</title></path>
+
+        </g>
+
+        <g class="legend">
+          <foreignObject class="legend" x="100" y="650" width="959" height="200">
+            <h3>Job categories</h3>
+            <div id="legend">
+              <span><span id="IT" class="box"></span>IT</span>
+              <span><span id="Healthcare & Therapy" class="box"></span>Healthcare & Therapy</span>
+              <span><span id="Engineering" class="box"></span>Engineering</span>
+              <span><span id="Accounting & Finance" class="box"></span>Accounting & Finance</span>
+              <span><span id="Sales" class="box"></span>Sales</span>
+              <span><span id="Marketing & Advertising" class="box"></span>Marketing & Advertising</span>
+              <span><span id="Law Enforcement/Security" class="box"></span>Law Enforcement/Security</span>
+              <span><span id="C-Level & TOP management" class="box"></span>C-Level & TOP management</span>
+              <span><span id="Management level" class="box"></span>Management level</span>
+              <span><span id="Science & Research" class="box"></span>Science & Research</span>
+              <span><span id="Customer Service" class="box"></span>Customer Service</span>
+              <span><span id="Manufacturing. Warehouse & Production" class="box"></span>Manufacturing. Warehouse & Production</span>
+              <span><span id="Human Resources" class="box"></span>Human Resources</span>
+              <span><span id="Office & Administrative" class="box"></span>Office & Administrative</span>
+              <span><span id="Building & Construction" class="box"></span>Building & Construction</span>
+            </div>
+
+          </foreignObject>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

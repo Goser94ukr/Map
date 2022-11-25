@@ -1,0 +1,302 @@
+[
+ {
+   "state": "Alabama",
+   "industry": "Law Enforcement/Security",
+   "position": "Counselor",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Counselor</h3>\n<i>Alabama</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,560 - $80,150</strong></p>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Law Enforcement/Security has a slight gap over all others.</p>\n<p>The position of Counselor corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Alaska",
+   "industry": "Science & Research",
+   "position": "Geologist",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Geologist</h3>\n<i>Alaska</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$81,240-$124,380</strong></p>\n\n<p>64% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Science & Research.</p>\n<p>The position of Geologist corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Arizona",
+   "industry": "IT",
+   "position": "Superintendent",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>Arizona</i>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Superintendent doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Arkansas",
+   "industry": "Building & Construction",
+   "position": "Architect",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Architect</h3>\n<i>Arkansas</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$53,260 - $128,960</strong></p>\n\n<p>17% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Building & Construction has a slight gap over all others.</p>\n<p>The position of Architect corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "California",
+   "industry": "IT",
+   "position": "Software Engineer",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Software Engineer</h3>\n<i>California</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$146,770</strong></p>\n\n<p>14% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Software Engineer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Colorado",
+   "industry": "IT",
+   "position": "Software Developer",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Software Developer</h3>\n<i>Colorado</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$120,140</strong></p>\n\n<p>21% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Software Developer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Connecticut",
+   "industry": "Accounting & Finance",
+   "position": "CRNA",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">CRNA</h3>\n<i>Connecticut</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$276,540</strong></p>\n\n<p>18% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Accounting & Finance has a slight gap over all others.</p>\n<p>The position of CRNA doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Delaware",
+   "industry": "IT",
+   "position": "Trader",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Trader</h3>\n<i>Delaware</i>\n\n<p>32% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Trader doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Florida",
+   "industry": "IT",
+   "position": "Project Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Florida</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$91,540</strong></p>\n\n<p>21% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Project Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Georgia",
+   "industry": "Manufacturing. Warehouse & Production",
+   "position": "Manufacturing Engineer",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Manufacturing Engineer</h3>\n<i>Georgia</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$63,540-$88,390</strong></p>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Manufacturing, Warehouse & Production industry is significantly greater over all others.</p>\n<p>The position of Manufacturing Engineer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Hawaii",
+   "industry": "Sales",
+   "position": "Territory Sales Executive",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Territory Sales Executive</h3>\n<i>Hawaii</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$103,030</strong></p>\n\n<p>41% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Territory Sales Executive corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Idaho",
+   "industry": "Management level",
+   "position": "Superintendent",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>Idaho</i>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Management level industry is significantly greater over all others.</p>\n<p>The position of Superintendent corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Illinois",
+   "industry": "Sales",
+   "position": "Electrical Engineer",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Electrical Engineer</h3>\n<i>Illinois</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$100,190</strong></p>\n\n<p>12% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Sales has a slight gap over all others.</p>\n<p>The position of Electrical Engineer doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Indiana",
+   "industry": "Healthcare & Therapy",
+   "position": "Mechanical Engineer",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Mechanical Engineer</h3>\n<i>Indiana</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$87,930</strong></p>\n\n<p>24% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Healthcare & Therapy industry is significantly greater over all others.</p>\n<p>The position of Mechanical Engineer doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Iowa",
+   "industry": "Healthcare & Therapy",
+   "position": "Administrator",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Administrator</h3>\n<i>Iowa</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$45,620-$105,850</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Healthcare & Therapy has a slight gap over all others.</p>\n<p>The position of Administrator doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Kansas",
+   "industry": "Engineering",
+   "position": "Plant Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Plant Manager</h3>\n<i>Kansas</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$113,480</strong></p>\n\n<p>68% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Engineering.</p>\n<p>The position of Plant Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Kentucky",
+   "industry": "Engineering",
+   "position": "Building Engineer",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Building Engineer</h3>\n<i>Kentucky</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$87,220</strong></p>\n\n<p>23% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Engineering industry is significantly greater over all others.</p>\n<p>The position of Building Engineer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Louisiana",
+   "industry": "Sales",
+   "position": "Sales Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Sales Manager</h3>\n<i>Louisiana</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$113,770</strong></p>\n\n<p>20% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Sales has a slight gap over all others.</p>\n<p>The position of Sales Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Maine",
+   "industry": "Healthcare & Therapy",
+   "position": "Nurse Practitioner",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Nurse Practitioner</h3>\n<i>Maine</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$116,370</strong></p>\n\n<p>68% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Healthcare & Therapy.</p>\n<p>The position of Nurse Practitioner corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Maryland",
+   "industry": "Healthcare & Therapy",
+   "position": "Estimator",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Estimator</h3>\n<i>Maryland</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$76,010</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Healthcare & Therapy has a slight gap over all others.</p>\n<p>The position of Estimator doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Massachusetts",
+   "industry": "Healthcare & Therapy",
+   "position": "CNA",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">CNA</h3>\n<i>Massachusetts</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$37,680</strong></p>\n\n<p>52% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of CNA corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Michigan",
+   "industry": "Human Resources",
+   "position": "HR Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">HR Manager</h3>\n<i>Michigan</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$120,150</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Human Resources has a slight gap over all others.</p>\n<p>The position of HR Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Minnesota",
+   "industry": "Accounting & Finance",
+   "position": "Maintenance Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Maintenance Manager</h3>\n<i>Minnesota</i>\n\n<p>20% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Accounting & Finance has a slight gap over all others.</p>\n<p>The position of Maintenance Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Mississippi",
+   "industry": "Law Enforcement/Security",
+   "position": "Safety Officer",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Safety Officer</h3>\n<i>Mississippi</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,940</strong></p>\n\n<p>24% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Law Enforcement/Security industry is significantly greater over all others.</p>\n<p>The position of Safety Officer corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Missouri",
+   "industry": "Management level",
+   "position": "Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Manager</h3>\n<i>Missouri</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$41,480-$145,860</strong></p>\n\n<p>26% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Management level industry is significantly greater over all others.</p>\n<p>The position of Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Montana",
+   "industry": "Engineering",
+   "position": "Transmission Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Transmission Manager</h3>\n<i>Montana</i>\n\n<p>36% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Engineering industry is significantly greater over all others.</p>\n<p>The position of Transmission Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Nebraska",
+   "industry": "Office & Administrative",
+   "position": "Office Manager And Executive Assistant",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Office Manager And Executive Assistant</h3>\n<i>Nebraska</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$37,800-$102,630</strong></p>\n\n<p>52% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The positions of Office Manager And Executive Assistant correspond to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Nevada",
+   "industry": "Accounting & Finance",
+   "position": "Accountant",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Accountant</h3>\n<i>Nevada</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$68,360</strong></p>\n\n<p>15% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Accounting & Finance has a slight gap over all others.</p>\n<p>The position of Accountant corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "New Hampshire",
+   "industry": "Healthcare & Therapy",
+   "position": "Director Of Nursing",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Director Of Nursing</h3>\n<i>New Hampshire</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$72,210-$120,730</strong></p>\n\n<p>71% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Healthcare & Therapy.</p>\n<p>The position of Director Of Nursing corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "New Jersey",
+   "industry": "C-Level & TOP management",
+   "position": "Social Media Director",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Social Media Director</h3>\n<i>New Jersey</i>\n\n<p>23% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the C-Level & TOP management industry is significantly greater over all others.</p>\n<p>The position of Social Media Director corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "New Mexico",
+   "industry": "Office & Administrative",
+   "position": "Executive Assistant",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Executive Assistant</h3>\n<i>New Mexico</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,520-$64,420</strong></p>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Office & Administrative industry is significantly greater over all others.</p>\n<p>The position of Executive Assistant corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "New York",
+   "industry": "IT",
+   "position": "Estimator",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Estimator</h3>\n<i>New York</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$83,550</strong></p>\n\n<p>14% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Estimator doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "North Carolina",
+   "industry": "IT",
+   "position": "Customer Service Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Customer Service Manager</h3>\n<i>North Carolina</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$36,850</strong></p>\n\n<p>25% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Customer Service Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "North Dakota",
+   "industry": "Healthcare & Therapy",
+   "position": "Business Account Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Business Account Manager</h3>\n<i>North Dakota</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$71,036-$118,560</strong></p>\n\n<p>42% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Business Account Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Ohio",
+   "industry": "Engineering",
+   "position": "Sales Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Sales Manager</h3>\n<i>Ohio</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$143,090</strong></p>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Engineering has a slight gap over all others.</p>\n<p>The position of Sales Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Oklahoma",
+   "industry": "Healthcare & Therapy",
+   "position": "Marketing Director",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Marketing Director</h3>\n<i>Oklahoma</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$60,330-$127,440</strong></p>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Healthcare & Therapy has a slight gap over all others.</p>\n<p>The position of Marketing Director doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Oregon",
+   "industry": "Customer Service",
+   "position": "Technician",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Technician</h3>\n<i>Oregon</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$38,120-$82,040</strong></p>\n\n<p>18% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but Customer Service has a slight gap over all others.</p>\n<p>The position of Technician doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Pennsylvania",
+   "industry": "IT",
+   "position": "Project Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Pennsylvania</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$90,340</strong></p>\n\n<p>12% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Project Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Rhode Island",
+   "industry": "Marketing & Advertising",
+   "position": "Marketing Director",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Marketing Director</h3>\n<i>Rhode Island</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$165,870</strong></p>\n\n<p>27% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Marketing & Advertising industry is significantly greater over all others.</p>\n<p>The position of Marketing Director corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "South Carolina",
+   "industry": "Accounting & Finance",
+   "position": "Accountant",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Accountant</h3>\n<i>South Carolina</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$71,400</strong></p>\n\n<p>29% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Accounting & Finance industry is significantly greater over all others.</p>\n<p>The position of Accountant corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "South Dakota",
+   "industry": "Office & Administrative",
+   "position": "Superintendent",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>South Dakota</i>\n\n<p>57% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Superintendent doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Tennessee",
+   "industry": "C-Level & TOP management",
+   "position": "Project Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Tennessee</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$80,430</strong></p>\n\n<p>15% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but C-Level & TOP management has a slight gap over all others.</p>\n<p>The position of Project Manager doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Texas",
+   "industry": "IT",
+   "position": "Assistant Superintendent",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Assistant Superintendent</h3>\n<i>Texas</i>\n\n<p>19% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Assistant Superintendent doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Utah",
+   "industry": "Accounting & Finance",
+   "position": "Banker",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Banker</h3>\n<i>Utah</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$75,040-$85,870</strong></p>\n\n<p>37% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Accounting & Finance industry is significantly greater over all others.</p>\n<p>The position of Banker corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Vermont",
+   "industry": "Healthcare & Therapy",
+   "position": "Hospitalist Physician",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Hospitalist Physician</h3>\n<i>Vermont</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$204,400-$280,490</strong></p>\n\n<p>75% is the share of the industry among all others in the state, which is significantly high. Accordingly, the state is not as diverse as others and has a critical need for Healthcare & Therapy.</p>\n<p>The position of Hospitalist Physician corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Virginia",
+   "industry": "IT",
+   "position": "Counsel",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Counsel</h3>\n<i>Virginia</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$43,320-$108,910</strong></p>\n\n<p>16% is the share of the industry among all others in the state, which is quite low. Accordingly, the state is diverse in terms of other industries, but IT has a slight gap over all others.</p>\n<p>The position of Counsel doesn't correspond to the most in-demand industry in the state, so this confirms a sharp change in the demand for them among the state.</p>"
+ },
+ {
+   "state": "Washington",
+   "industry": "IT",
+   "position": "Project Manager",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Project Manager</h3>\n<i>Washington</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$120,800</strong></p>\n\n<p>29% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Project Manager corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "West Virginia",
+   "industry": "IT",
+   "position": "Analyst",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Analyst</h3>\n<i>West Virginia</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$33,840-$91,160</strong></p>\n\n<p>27% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the IT industry is significantly greater over all others.</p>\n<p>The position of Analyst corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Wisconsin",
+   "industry": "Management level",
+   "position": "Superintendent",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Superintendent</h3>\n<i>Wisconsin</i>\n\n<p>24% is the share of the industry among all others in the state, which is relatively low. Accordingly, the state is diverse in terms of other industries, but the need in the Management level industry is significantly greater over all others.</p>\n<p>The position of Superintendent corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ },
+ {
+   "state": "Wyoming",
+   "industry": "Accounting & Finance",
+   "position": "Banker",
+   "tooltip": "<h3 style=\"margin-bottom: 0px\">Banker</h3>\n<i>Wyoming</i>\n<p style=\"margin-top: 0px\">Average Annual Salary: <strong>$57,780-$71,920</strong></p>\n\n<p>41% is the share of the industry among all others in the state, which is relatively high. Accordingly, the state feels an acute need for it caused by various reasons.</p>\n<p>The position of Banker corresponds to the most in-demand industry in the state, so this confirms its precedence.</p>"
+ }
+]
